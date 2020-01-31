@@ -1,0 +1,65 @@
+What do we want from the application?
+
+ - Tool that manages minecraft servers.
+    - Has a web frontend (react).
+    - Has a .NET Core 3.1 Rest API.
+
+Features
+
+ - Minecraft servers
+    - Create
+    - Delete
+    - Modify Settings
+    - Start/Stop servers
+    - Interface with Plugins
+    - Run commands
+ - Authentication
+    - Users
+    - Passwords
+    - Initial Superuser for creating the first user
+    - emailing a one-time use link to set up an account
+    - Roles
+        - Admin
+            - Run commands against servers.
+            - Create servers
+            - Delete servers
+            - Modify servers
+            - Start/Stop servers
+        - Read only
+            - See what servers are available
+            - See information about the servers (port numbers, slots, version, status)
+
+API
+
+ - Controllers
+    - ServerController
+        - list
+        - get
+        - list available versions
+        - create
+        - delete
+        - update
+        - start
+        - stop
+        - issue command
+    - UserController
+        - list
+        - get self
+        - change password
+        - change username
+        - invite user
+        - set role
+        - validate link
+        - create user (using link)
+        - delete
+UI
+ - Routes
+    - server
+    - user
+
+Models
+
+Data Layer
+
+Business Layer
+
