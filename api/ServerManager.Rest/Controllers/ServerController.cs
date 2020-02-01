@@ -67,10 +67,61 @@ namespace ServerManager.Rest.Controllers
             throw new NotImplementedException();
         }
 
-        // TODO: templates  
-        // TODO: import 
+        // TODO: templates
+        /// <summary>
+        /// TODO: Define TDO Templates
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        [HttpGet("templates")]
+        public async Task<IEnumerable<object>> TemplatesAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        // TODO: import
+        /// <summary>
+        /// TODO: Create ImportRequest, and ImportRequestResponse
+        /// </summary>
+        /// <param name="importRequest"></param>
+        /// <param name="cancellationToken"></param>
+        [HttpPost("import")]
+        public async Task<IEnumerable<object>> ImportAsync([FromBody] object importRequest, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
         // TODO: start 
+        /// <summary>
+        /// TODO: Create executor for start command
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="cancellationToken"></param>
+        [HttpPost("{serverId}/start")]
+        public async Task<IEnumerable<object>> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken) {
+            throw new NotImplementedException();
+        }
         // TODO: stop 
+        /// <summary>
+        /// TODO: execute stop command in server console
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("{serverId}/stop")]
+        public async Task<IEnumerable<object>> StopAsync([FromRoute] int serverId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
         // TODO: command 
+        /// <summary>
+        /// TODO: create executor for command
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="serverCommandRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("{serverId}/executecommand")]
+        public async Task<IEnumerable<object>> ExecuteCommand([FromRoute] int serverId, [FromBody] object serverCommandRequest, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
