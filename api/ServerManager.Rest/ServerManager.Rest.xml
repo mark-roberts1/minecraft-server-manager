@@ -21,7 +21,7 @@
             <summary>
             TODO: Create the CreateServerRequest, and the CreateServerResponse
             </summary>
-            <param name="createServerRequest"></param>
+            <param name="createRequest"></param>
             <param name="cancellationToken"></param>
         </member>
         <member name="M:ServerManager.Rest.Controllers.ServerController.DeleteAsync(System.Int32,System.Threading.CancellationToken)">
@@ -75,6 +75,688 @@
             <param name="serverCommandRequest"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
+        </member>
+        <member name="T:ServerManager.Rest.Database.ConnectionException">
+            <summary>
+            Represents an encountered exception while establishing a database connection
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ConnectionException.#ctor(System.String)">
+            <summary>
+            Creates an instance of <see cref="T:ServerManager.Rest.Database.ConnectionException"/>
+            </summary>
+            <param name="message">A summary of the problem</param>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ConnectionException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates an instance of <see cref="T:ServerManager.Rest.Database.ConnectionException"/>
+            </summary>
+            <param name="message">A summary of the problem</param>
+            <param name="innerException">A reference to the underlying problem</param>
+        </member>
+        <member name="T:ServerManager.Rest.Database.DatabaseCommandExecutor">
+            <summary>
+            Used to queries against a database
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.#ctor(ServerManager.Rest.Database.IDataMapper)">
+            <summary>
+            Constructs an instance of <see cref="T:ServerManager.Rest.Database.DatabaseCommandExecutor"/>
+            </summary>
+            <param name="dataMapper">Maps data to models from a DataReader</param>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.Execute``1(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteAsync``1(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteAsync``1(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteNonQuery(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteNonQueryAsync(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteNonQueryAsync(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteScalar``1(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteScalarAsync``1(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteScalarAsync``1(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteSingle``1(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteSingleAsync``1(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DatabaseCommandExecutor.ExecuteSingleAsync``1(ServerManager.Rest.Database.ICommand)">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerManager.Rest.Database.DataMapper">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DataMapper.Map``1(System.Data.IDataReader)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DataMapper.MapSingle``1(System.Data.IDataReader)">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerManager.Rest.Database.DbParameter">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.DbParameter.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.DbParameter.Value">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.DbParameter.DbType">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.DbParameter.TypeName">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DbParameter.From(System.String,System.Object)">
+            <summary>
+            Constructs a DbParameter using the provided parameters
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Database.DbParameter.From(System.String,System.Object,System.Nullable{System.Data.SqlDbType},System.String)">
+            <summary>
+            Constructs a DbParameter using the provided parameters
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbType"></param>
+            <param name="typeName"></param>
+        </member>
+        <member name="T:ServerManager.Rest.Database.Extensions">
+            <summary>
+            Extension methods
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Extensions.EnsureSqlFile(System.String)">
+            <summary>
+            Ensures that a string ends with ".sql"
+            </summary>
+            <param name="filename">string to check</param>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Extensions.TryGetValue(System.Data.IDataReader,System.Reflection.PropertyInfo,System.Object@)">
+            <summary>
+            Attempts to read a value from a DataReader.
+            </summary>
+            <param name="reader">a DataReader</param>
+            <param name="property">Contains the name to use to identify the value in the DataReader</param>
+            <param name="value">out param use to assign the value</param>
+            <returns><see langword="true"/> if value was found, <see langword="false"/> if not.</returns>
+        </member>
+        <member name="T:ServerManager.Rest.Database.ICommand">
+            <summary>
+            A command to execute against a database
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.ICommand.CommandText">
+            <summary>
+            The command to be executed.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.ICommand.CommandType">
+            <summary>
+            The type of command being executed.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.ICommand.Connection">
+            <summary>
+            The database connection.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.ICommand.Parameters">
+            <summary>
+            the parameter name/values for parameterizing the query.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteReaderAsync(System.Threading.CancellationToken)">
+            <summary>
+            executes a command asynchronously, and returns an <see cref="T:System.Data.IDataReader"/> instance to read the data.
+            </summary>
+            <param name="cancellationToken">token to cancel the action</param>
+            <returns>data reader</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteNonQueryAsync(System.Threading.CancellationToken)">
+            <summary>
+            executes a command asynchronously, and returns the number of affected records.
+            </summary>
+            <param name="cancellationToken">token to cancel the action</param>
+            <returns>number of affected records.</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteScalarAsync(System.Threading.CancellationToken)">
+            <summary>
+            executes a command asynchronously, and returns the first column of the first row of results.
+            </summary>
+            <param name="cancellationToken">token to cancel the action</param>
+            <returns>the first column of the first row of results</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteReaderAsync">
+            <summary>
+            executes a command asynchronously, and returns an <see cref="T:System.Data.IDataReader"/> instance to read the data.
+            </summary>
+            <returns>data reader</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteNonQueryAsync">
+            <summary>
+            executes a command asynchronously, and returns the number of affected records.
+            </summary>
+            <returns>number of affected records.</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteScalarAsync">
+            <summary>
+            executes a command asynchronously, and returns the first column of the first row of results.
+            </summary>
+            <returns>the first column of the first row of results</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteReader">
+            <summary>
+            executes a command, and returns an <see cref="T:System.Data.IDataReader"/> instance to read the data.
+            </summary>
+            <returns>data reader</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteNonQuery">
+            <summary>
+            executes a command, and returns the number of affected records.
+            </summary>
+            <returns>number of affected records.</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommand.ExecuteScalar">
+            <summary>
+            executes a command, and returns the first column of the first row of results.
+            </summary>
+            <returns>the first column of the first row of results</returns>
+        </member>
+        <member name="T:ServerManager.Rest.Database.ICommandExecutor">
+            <summary>
+            This class is responsible for executing commands against a database.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.Execute``1(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command and returns <see cref="T:System.Collections.Generic.IEnumerable`1"/> results.
+            </summary>
+            <typeparam name="T">a type to which to convert query results</typeparam>
+            <param name="command">a command to execute</param>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteSingle``1(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command and returns the first row as an instance of <typeparamref name="T"/>
+            </summary>
+            <typeparam name="T">the type to convert the query result.</typeparam>
+            <param name="command">a command to execute</param>
+            <returns>an instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteScalar``1(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command and returns the first column of the first row as an instance of <typeparamref name="T"/>
+            </summary>
+            <typeparam name="T">the type to convert the query result.</typeparam>
+            <param name="command">a command to execute</param>
+            <returns>an instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteNonQuery(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command and returns the number of affected records.
+            </summary>
+            <param name="command">a command to execute</param>
+            <returns>the number of affected records</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteAsync``1(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <summary>
+            Executes a command asynchronously and returns <see cref="T:System.Collections.Generic.IEnumerable`1"/> results.
+            </summary>
+            <typeparam name="T">a type to which to convert query results</typeparam>
+            <param name="command">a command to execute</param>
+            <param name="cancellationToken">token used to cancel the action</param>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteSingleAsync``1(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <summary>
+            Executes a command asynchronously and returns the first row as an instance of <typeparamref name="T"/>
+            </summary>
+            <typeparam name="T">the type to convert the query result.</typeparam>
+            <param name="command">a command to execute</param>
+            <param name="cancellationToken">token used to cancel the action</param>
+            <returns>an instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteScalarAsync``1(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <summary>
+            Executes a command asynchronously and returns the first column of the first row as an instance of <typeparamref name="T"/>
+            </summary>
+            <typeparam name="T">the type to convert the query result.</typeparam>
+            <param name="command">a command to execute</param>
+            <param name="cancellationToken">token used to cancel the action</param>
+            <returns>an instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteNonQueryAsync(ServerManager.Rest.Database.ICommand,System.Threading.CancellationToken)">
+            <summary>
+            Executes a command asynchronously and returns the number of affected records.
+            </summary>
+            <param name="command">a command to execute</param>
+            <param name="cancellationToken">token used to cancel the action</param>
+            <returns>the number of affected records</returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteAsync``1(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command asynchronously and returns <see cref="T:System.Collections.Generic.IEnumerable`1"/> results.
+            </summary>
+            <typeparam name="T">a type to which to convert query results</typeparam>
+            <param name="command">a command to execute</param>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteSingleAsync``1(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command asynchronously and returns the first row as an instance of <typeparamref name="T"/>
+            </summary>
+            <typeparam name="T">the type to convert the query result.</typeparam>
+            <param name="command">a command to execute</param>
+            <returns>an instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteScalarAsync``1(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command asynchronously and returns the first column of the first row as an instance of <typeparamref name="T"/>
+            </summary>
+            <typeparam name="T">the type to convert the query result.</typeparam>
+            <param name="command">a command to execute</param>
+            <returns>an instance of <typeparamref name="T"/></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Database.ICommandExecutor.ExecuteNonQueryAsync(ServerManager.Rest.Database.ICommand)">
+            <summary>
+            Executes a command asynchronously and returns the number of affected records.
+            </summary>
+            <param name="command">a command to execute</param>
+            <returns>the number of affected records</returns>
+        </member>
+        <member name="T:ServerManager.Rest.Database.IConnection">
+            <summary>
+            Represents a connection to a database.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IConnection.OpenAsync(System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously opens a cancellable connection to the database.
+            </summary>
+            <param name="cancellationToken">token used to cancel the action.</param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:ServerManager.Rest.Database.ConnectionException"></exception>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IConnection.OpenAsync">
+            <summary>
+            Asynchronously opens a connection to the database.
+            </summary>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:ServerManager.Rest.Database.ConnectionException"></exception>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IConnection.Open">
+            <summary>
+            Asynchronously opens a connection to the database.
+            </summary>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:ServerManager.Rest.Database.ConnectionException"></exception>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IConnection.Close">
+            <summary>
+            Closes the Connection.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IConnection.ChangeDatabase(System.String)">
+            <summary>
+            Changes the database targeted on the connection.
+            </summary>
+            <param name="database">Name of the database to target</param>
+        </member>
+        <member name="T:ServerManager.Rest.Database.IDataMapper">
+            <summary>
+            Class used for mapping data from the database to concrete classes
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IDataMapper.MapSingle``1(System.Data.IDataReader)">
+            <summary>
+            Reads a single result from <see cref="T:System.Data.IDataReader"/>
+            </summary>
+            <typeparam name="T">Type to which to convert</typeparam>
+            <param name="reader">Data reader containing data to convert</param>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IDataMapper.Map``1(System.Data.IDataReader)">
+            <summary>
+            Reads a collection of results from <see cref="T:System.Data.IDataReader"/>
+            </summary>
+            <typeparam name="T">Type to which to convert</typeparam>
+            <param name="reader">Data reader containing data to convert</param>
+        </member>
+        <member name="T:ServerManager.Rest.Database.IDbCommandFactory">
+            <summary>
+            A factory class used to construct implementations of <see cref="T:ServerManager.Rest.Database.ICommand"/>
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IDbCommandFactory.BuildCommand(System.String,System.Data.CommandType,ServerManager.Rest.Database.IConnection,ServerManager.Rest.Database.IParameter[])">
+            <summary>
+            Constructs an <see cref="T:ServerManager.Rest.Database.ICommand"/> instance using the given parameters.
+            </summary>
+            <param name="commandText">The text of the command to execute.</param>
+            <param name="commandType">The type of command being executed.</param>
+            <param name="connection">A database connection.</param>
+            <param name="parameters">Query parameters.</param>
+            <returns>A command to be executed.</returns>
+        </member>
+        <member name="T:ServerManager.Rest.Database.IDbConnectionFactory">
+            <summary>
+            A factory class used to construct implementations of <see cref="T:ServerManager.Rest.Database.IConnection"/>
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.IDbConnectionFactory.BuildConnection(System.String)">
+            <summary>
+            Constructs a connection given a connection string.
+            </summary>
+            <param name="connectionString">information about a connection to a database</param>
+            <returns>a connection</returns>
+        </member>
+        <member name="T:ServerManager.Rest.Database.IParameter">
+            <summary>
+            Parameter to provide to an instance of <see cref="T:ServerManager.Rest.Database.ICommand"/>
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.IParameter.Name">
+            <summary>
+            Name of the parameter
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.IParameter.Value">
+            <summary>
+            Value of the parameter
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.IParameter.DbType">
+            <summary>
+            Data type of the parameter
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.IParameter.TypeName">
+            <summary>
+            For structured types, the name of the user defined type
+            </summary>
+        </member>
+        <member name="T:ServerManager.Rest.Database.QueryReadException">
+            <summary>
+            Represents an encountered exception while reading a query stored in an embedded resource
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.QueryReadException.QueryName">
+            <summary>
+            The name of the query causing the issue
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.QueryReadException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Creates an instance of <see cref="T:ServerManager.Rest.Database.QueryReadException"/>
+            </summary>
+            <param name="queryName">The name of the query causing the issue</param>
+            <param name="message">A summary of the problem</param>
+            <param name="ex">A reference to the underlying problem</param>
+        </member>
+        <member name="T:ServerManager.Rest.Database.Sqlite.SqliteCommand">
+            <summary>
+            Represents a command to execute against a SQLite database.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.#ctor">
+            <summary>
+            Constructs an instance of <see cref="T:ServerManager.Rest.Database.Sqlite.SqliteCommand"/>
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Database.Sqlite.SqliteCommand.CommandText">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.Sqlite.SqliteCommand.CommandType">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.Sqlite.SqliteCommand.Connection">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.Database.Sqlite.SqliteCommand.Parameters">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteNonQueryAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteReaderAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteScalarAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteNonQueryAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteReaderAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteScalarAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteNonQuery">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteReader">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerManager.Rest.Database.Sqlite.SqliteCommand.ExecuteScalar">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerManager.Rest.IO.DirectoryListener.Path">
+            <summary>
+            The directory to monitor.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.IO.DirectoryListener.IncludeSubdirectories">
+            <summary>
+            If set to <see langword="true"/>, listener will listen for created files recursively. 
+            If <see langword="false"/>, it will only listen at the top-level.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.IO.DirectoryListener.IsListening">
+            <summary>
+            Returns <see langword="true"/> if the listener thread is alive, <see langword="false"/> if not.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.IO.DirectoryListener.#ctor(ServerManager.Rest.IO.IDiskOperator,ServerManager.Rest.Threading.IThreadFactory)">
+            <summary>
+            Constructs an instance of <see cref="T:ServerManager.Rest.IO.DirectoryListener"/>
+            </summary>
+            <param name="diskOperator">object used to perform disk operations. Defaults to internal <see cref="T:ServerManager.Rest.IO.DiskOperator"/></param>
+            <param name="threadFactory">object used to create threads. Defaults to internal <see cref="T:ServerManager.Rest.Threading.ThreadFactory"/></param>
+        </member>
+        <member name="M:ServerManager.Rest.IO.DirectoryListener.Start">
+            <summary>
+            Starts the listener thread.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the Path is null or empty.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">Thrown when Path is set, but does not exist.</exception>
+            <exception cref="T:System.Threading.ThreadStateException">Thrown when Start has been called after <see cref="T:ServerManager.Rest.IO.IDirectoryListener"/> is running.</exception>
+        </member>
+        <member name="M:ServerManager.Rest.IO.DirectoryListener.Stop">
+            <summary>
+            Stops the listener thread. Does not clear the cache.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.IO.DirectoryListener.ClearCache">
+            <summary>
+            Clears the cached files that we have already handled.
+            </summary>
+        </member>
+        <member name="E:ServerManager.Rest.IO.DirectoryListener.Created">
+            <summary>
+            Event handler that fires when the listener hears a file that it hasn't heard before.
+            </summary>
+        </member>
+        <member name="E:ServerManager.Rest.IO.DirectoryListener.Error">
+            <summary>
+            method to handle errors that occur in the listener.
+            </summary>
+            <exception cref="T:ServerManager.Rest.IO.DirectoryListenerStoppedException">Thrown when an exception is causing the listener thread to stop executing.</exception>
+            <exception cref="T:ServerManager.Rest.IO.DirectoryReadException">Thrown when an exception is thrown when checking the path or subdirectory for files/subdirectories.</exception>
+            <exception cref="T:ServerManager.Rest.IO.EventHandlerException">Thrown when an exception is thrown while executing a delegate method.</exception>
+            <exception cref="T:System.Exception">Thrown when an exception is thrown that is not expected.</exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ServerManager.Rest.IO.DiskOperator.ExtractCompressedFilesTo(System.String,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:ServerManager.Rest.IO.DiskOperator.ExtractCompressedFilesTo(System.String,System.String,System.String)" -->
+        <member name="M:ServerManager.Rest.IO.DiskOperator.IsFileLocked(System.String)">
+            <summary>
+            Attempts to open a file. If IOException (not FileNotFoundException) is thrown, assumes that the file is locked.
+            </summary>
+            <param name="filename">file to check for lock.</param>
+            <returns>Returns <see langword="true"/> if locked, <see langword="false"/> if not.</returns>
+            <exception cref="T:System.Security.SecurityException"></exception>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException"></exception>
+            <exception cref="T:System.UnauthorizedAccessException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:ServerManager.Rest.IO.DiskOperator.MoveFile(System.String,System.String,System.Boolean)">
+            <summary>
+            In order to allow overwrite specification, this method does a copy and then deletes the source.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.IO.DiskOperator.WaitForUnlockOrTimeout(System.String,System.Int32)">
+            <summary>
+            Waits for a file to become unlocked, or until the provided timeout period elapses.
+            </summary>
+            <param name="filename">File to check for lock.</param>
+            <param name="timeoutInSeconds">Number of seconds to wait before throwing TimeoutException.</param>
+            <exception cref="T:System.TimeoutException"></exception>
+            <exception cref="T:System.Security.SecurityException"></exception>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException"></exception>
+            <exception cref="T:System.UnauthorizedAccessException"></exception>
+            <exception cref="T:System.ArgumentException"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="P:ServerManager.Rest.IO.IDirectoryListener.Path">
+            <summary>
+            The directory to monitor.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.IO.IDirectoryListener.IncludeSubdirectories">
+            <summary>
+            If set to <see langword="true"/>, listener will listen for created files recursively. 
+            If <see langword="false"/>, it will only listen at the top-level.
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.IO.IDirectoryListener.IsListening">
+            <summary>
+            Returns <see langword="true"/> if the listener thread is alive, <see langword="false"/> if not.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.IO.IDirectoryListener.Start">
+            <summary>
+            Starts the listener thread.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the Path is null or empty.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">Thrown when Path is set, but does not exist.</exception>
+            <exception cref="T:System.Threading.ThreadStateException">Thrown when Start has been called after <see cref="T:ServerManager.Rest.IO.IDirectoryListener"/> is running.</exception>
+        </member>
+        <member name="M:ServerManager.Rest.IO.IDirectoryListener.Stop">
+            <summary>
+            Stops the listener thread. Does not clear the cache.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.IO.IDirectoryListener.ClearCache">
+            <summary>
+            Clears the cached files that we have already handled.
+            </summary>
+        </member>
+        <member name="E:ServerManager.Rest.IO.IDirectoryListener.Created">
+            <summary>
+            Event handler that fires when the listener hears a file that it hasn't heard before.
+            </summary>
+        </member>
+        <member name="E:ServerManager.Rest.IO.IDirectoryListener.Error">
+            <summary>
+            method to handle errors that occur in the listener.
+            </summary>
+            <exception cref="T:ServerManager.Rest.IO.DirectoryListenerStoppedException">Thrown when an exception is causing the listener thread to stop executing.</exception>
+            <exception cref="T:ServerManager.Rest.IO.DirectoryReadException">Thrown when an exception is thrown when checking the path or subdirectory for files/subdirectories.</exception>
+            <exception cref="T:ServerManager.Rest.IO.EventHandlerException">Thrown when an exception is thrown while executing a delegate method.</exception>
+            <exception cref="T:System.Exception">Thrown when an exception is thrown that is not expected.</exception>
+        </member>
+        <member name="T:ServerManager.Rest.IO.IDiskOperator">
+            <summary>
+            Contract for basic disk operations in System.IO, to act as an integration point.
+            </summary>
+        </member>
+        <member name="T:ServerManager.Rest.Threading.ThreadFactory">
+            <summary>
+            Factory class used to create Threads
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Threading.ThreadFactory.#ctor">
+            <summary>
+            Constructs an instance of <see cref="T:ServerManager.Rest.Threading.ThreadFactory"/>
+            </summary>
+        </member>
+        <member name="P:ServerManager.Rest.Threading.ThreadFactory.IsAlive">
+            <summary>
+            <see langword="true"/> if a thread has been created and is executing, <see langword="false"/> 
+            if either a created thread has finished, or a thread has not yet been created.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Threading.ThreadFactory.CreateIntervalThread(System.Action,System.IO.ErrorEventHandler,System.Int32,System.Boolean)">
+            <summary>
+            Creates a thread that executes on an interval set by the interval parameter.
+            </summary>
+            <param name="threadProc">the action to execute</param>
+            <param name="errorHandler">a delegate used to handle errors when they arise</param>
+            <param name="interval">the interval on which this thread executes</param>
+            <param name="background">indicates whether the thread should run in the background or not</param>
+            <returns><see cref="T:ServerManager.Rest.Threading.ThreadCreationResult"/></returns>
+            <exception cref="T:System.Threading.ThreadStateException">Thrown when a thread is already running.</exception>
+            <exception cref="T:System.ArgumentNullException">threadProc parameter cannot be null</exception>
+        </member>
+        <member name="M:ServerManager.Rest.Threading.ThreadFactory.CreateSingleExecutionThread(System.Action{System.Threading.CancellationToken},System.IO.ErrorEventHandler)">
+            <summary>
+            Creates a thread that executes one time
+            </summary>
+            <param name="start">action to execute</param>
+            <param name="errorHandler">delegate to handle any exception that is thrown</param>
+            <returns><see cref="T:ServerManager.Rest.Threading.ThreadCreationResult"/></returns>
+            <exception cref="T:System.Threading.ThreadStateException">Thrown when a thread is already running.</exception>
+            <exception cref="T:System.ArgumentNullException">start parameter cannot be null</exception>
+        </member>
+        <member name="M:ServerManager.Rest.Threading.ThreadFactory.Start">
+            <summary>
+            Starts the thread that was created.
+            </summary>
+            <exception cref="T:System.Threading.ThreadStateException">Thrown when Start is called before creating a thread.</exception>
+        </member>
+        <member name="M:ServerManager.Rest.Threading.ThreadFactory.Stop">
+            <summary>
+            Stops any running thread, and sets the factory to the initial state.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Threading.ThreadFactory.GetLastException">
+            <summary>
+            Gets the last exception that was thrown.
+            </summary>
+            <returns><see cref="T:System.Exception"/></returns>
         </member>
     </members>
 </doc>
