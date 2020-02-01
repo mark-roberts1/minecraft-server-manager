@@ -47,20 +47,52 @@ API
         - list
         - get self
         - change password
-        - change username
+        - change email
         - invite user
         - set role
         - validate link
         - create user (using link)
         - delete
+        - togglelock
+    - LoginController
+        - Login
+        - forgot password
 UI
- - Routes
-    - server
-    - user
+ - Login page
+    - username
+    - password
+    - forgot password
 
-Models
-
-Data Layer
-
-Business Layer
-
+    * user inputs username and password. If success, return 200 OK HTTP status code along with access token. If not success, return 401 unauthorized access status code.
+    * user gets 5 attempts. On 5th unsuccessful attempt, admin will need to unlock the account.
+ - dashboard
+    - popular servers maybe? 
+    - recently updated maybe?
+    - online users on right pane?
+    - Invite a friend
+ - Server list
+    - Paginated, list of card views. Each card represents a server.
+        - click the card to open the server page.
+            - ADMIN: modify properties of the server.
+            - ADMIN: issue commands, start, stop the server.
+            - view properties of the server.
+            - view status.
+            - delete the server.
+                - confirmation popup
+    - add a server.
+        - name
+        - Minecraft version
+        - properties
+            - key value list
+ - User list
+    - Paginated, list of card views. Each card represents a user.
+    - Invite a friend
+    - IF ADMIN
+        - see if user is locked out. has the ability to unlock user.
+        - lock
+        - x to delete user
+ - Myself
+    - change email
+    - change password
+    - delete account
+    - set minecraft username
