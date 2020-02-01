@@ -1,0 +1,30 @@
+@import "../fonts/Minecrafter_Reg.scss";
+@import "../App.scss";
+$lapis: #1439A3;
+$iron: #949494;
+$gold: #E8F057;
+$coal: #0E0E0E;
+$diamond: #629496;
+
+.btn {
+    font-family: "Minecrafter_Reg", sans-serif;
+    cursor: pointer;
+    
+    
+}
+.btn-header {
+    background-color: $diamond;
+
+    position: relative;
+    height:100%;
+    border:none;
+    width:25%;
+    transition: background-color 0.3s ease;
+
+    
+
+}
+.btn-header:hover{
+    background: #88a2a3 !important;
+    
+}
