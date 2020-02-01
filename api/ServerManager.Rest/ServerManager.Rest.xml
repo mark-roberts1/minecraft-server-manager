@@ -76,6 +76,69 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.ListAsync(System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define DTO UserItem
+            </summary>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.GetSelfAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define DTO UserItem
+            </summary>
+            <param name="userId"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.UpdateUsernameAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: define updateUsername, updateRequest
+            </summary>
+            <param name="userId"></param>
+            <param name="updateRequest"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.InviteUser(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: define inviteRequest
+            </summary>
+            <param name="inviteRequest"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.ValidateAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Access data to check link
+            </summary>
+            <param name="userId"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.CreateUser(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: define createAccountRequest
+            TODO: create new User object and store information
+            </summary>
+            <param name="createAccountRequest"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.UpdateRoleAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: define updateRequest
+            TODO: create RoleList and assign roles to list
+            </summary>
+            <param name="userId"></param>
+            <param name="updateRequest"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.UserController.Delete(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: define deleteUserRequest
+            </summary>
+            <param name="userId"></param>
+            <param name="deleteUserRequest"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:ServerManager.Rest.Database.ConnectionException">
             <summary>
             Represents an encountered exception while establishing a database connection
@@ -701,6 +764,38 @@
         <member name="T:ServerManager.Rest.IO.IDiskOperator">
             <summary>
             Contract for basic disk operations in System.IO, to act as an integration point.
+            </summary>
+        </member>
+        <member name="M:ServerManager.Rest.Logging.ILogger.Log(ServerManager.Rest.Logging.LogLevel,System.String)">
+            <summary>
+            Logs a pre-made message to the console/logfile.
+            </summary>
+            <param name="logLevel">level of severity</param>
+            <param name="message">message to be logged</param>
+        </member>
+        <member name="M:ServerManager.Rest.Logging.ILogger.Log(ServerManager.Rest.Logging.LogLevel,System.Exception)">
+            <summary>
+            Logs an exception to the console/logfile.
+            </summary>
+            <param name="logLevel">level of severity</param>
+            <param name="ex">exception to be formatted and logged</param>
+        </member>
+        <member name="M:ServerManager.Rest.Logging.ILogger.Log(ServerManager.Rest.Logging.LogLevel,System.String,System.Object[])">
+            <summary>
+            logs a message to the console given a format and parameters.
+            </summary>
+            <param name="logLevel">level of severity</param>
+            <param name="format">format to pass to string.Format</param>
+            <param name="parameters">parameters to pass to string.Format</param>
+        </member>
+        <member name="T:ServerManager.Rest.Logging.ILoggerConfiguration">
+            <summary>
+            Contract to implement to tell <see cref="T:ServerManager.Rest.Logging.LoggerFactory"/> how a logger should be configured.
+            </summary>
+        </member>
+        <member name="T:ServerManager.Rest.Logging.LoggerFactory">
+            <summary>
+            This class is best used as a singleton. NLog loggers and the LogManager are static resources and only need to be constructed once.
             </summary>
         </member>
         <member name="T:ServerManager.Rest.Threading.ThreadFactory">
