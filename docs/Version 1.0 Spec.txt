@@ -9,6 +9,7 @@ Features
  - Minecraft servers
     - Create
     - Delete
+    - Import
     - Modify Settings
     - Start/Stop servers
     - Interface with Plugins
