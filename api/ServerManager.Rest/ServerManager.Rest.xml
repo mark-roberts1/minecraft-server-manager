@@ -4,5 +4,77 @@
         <name>ServerManager.Rest</name>
     </assembly>
     <members>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.ListAsync(System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define DTO ServerItem
+            </summary>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.GetAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define DTO ServerItem
+            </summary>
+            <param name="serverId"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.CreateAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Create the CreateServerRequest, and the CreateServerResponse
+            </summary>
+            <param name="createServerRequest"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.DeleteAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define ServerDeleteResult
+            </summary>
+            <param name="serverId"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.UpdateAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define UpdateServerRequest, UpdateServerResponse
+            </summary>
+            <param name="serverId"></param>
+            <param name="updateRequest"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.TemplatesAsync(System.Threading.CancellationToken)">
+            <summary>
+            TODO: Define TDO Templates
+            </summary>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.ImportAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Create ImportRequest, and ImportRequestResponse
+            </summary>
+            <param name="importRequest"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.StartAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            TODO: Create executor for start command
+            </summary>
+            <param name="serverId"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.StopAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            TODO: execute stop command in server console
+            </summary>
+            <param name="serverId"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ServerManager.Rest.Controllers.ServerController.ExecuteCommand(System.Int32,System.Object,System.Threading.CancellationToken)">
+            <summary>
+            TODO: create executor for command
+            </summary>
+            <param name="serverId"></param>
+            <param name="serverCommandRequest"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

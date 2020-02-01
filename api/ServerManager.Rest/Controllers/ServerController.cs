@@ -36,7 +36,7 @@ namespace ServerManager.Rest.Controllers
         /// <summary>
         /// TODO: Create the CreateServerRequest, and the CreateServerResponse
         /// </summary>
-        /// <param name="createServerRequest"></param>
+        /// <param name="createRequest"></param>
         /// <param name="cancellationToken"></param>
         [HttpPost("create")]
         public async Task<object> CreateAsync([FromBody] object createRequest, CancellationToken cancellationToken)
