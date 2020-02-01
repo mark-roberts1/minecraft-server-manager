@@ -8,6 +8,8 @@ $diamond: #629496;
 $app-width: 100%;
 $app-height: 100%;
 $header-height: 75px;
+$right-panel-width: 25%;
+
 
 .App {
   top: 0;
@@ -27,6 +29,18 @@ $header-height: 75px;
       margin-left: 15px;
       width: 45px;
     }
+    .header-buttons {
+      position:fixed;
+      width:$app-width;
+      height:$header-height;
+      
+      margin-left:75px;
+      .button{
+        position: sticky;
+        padding-bottom:100px;
+        
+      }
+    }
   }
 
   .app-content {
@@ -34,5 +48,15 @@ $header-height: 75px;
     height: calc(#{$app-height} - #{$header-height});
     margin-top: $header-height;
     background-color: $coal;
+    
+  }
+  .right-panel {
+    width: $right-panel-width;
+    height: $app-height;
+    align-self: right;
+    margin-top: $header-height;
+    margin-left: calc(#{$app-width} - #{$right-panel-width});
+    background-color: $iron;
+    opacity: 50%;
   }
 }
