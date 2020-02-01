@@ -39,7 +39,7 @@ namespace ServerManager.Rest
                         Version = "v1"
                     });
 
-                c.IncludeXmlComments($"{AppDomain.CurrentDomain.BaseDirectory}\\ServerManager.Rest.xml");
+                //c.IncludeXmlComments($"ServerManager.Rest.xml");
             });
         }
 
