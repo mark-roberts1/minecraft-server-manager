@@ -11,6 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ServerManager.Rest.Data;
+using ServerManager.Rest.Database;
+using ServerManager.Rest.Database.Sqlite;
+using ServerManager.Rest.Logging;
+using ServerManager.Rest.Utility;
 
 namespace ServerManager.Rest
 {
@@ -40,6 +45,20 @@ namespace ServerManager.Rest
                     });
 
                 //c.IncludeXmlComments($"ServerManager.Rest.xml");
+            });
+
+            services.AddTransient<IDataAccessLayer, DataAccessLayer>();
+            services.AddTransient<ILinkGenerator, LinkGenerator>();
+            services.AddTransient<IDbConnectionFactory, SqliteConnectionFactory>();
+            services.AddTransient<IDbCommandFactory, SqliteCommandFactory>();
+            services.AddTransient<ICommandExecutor, DatabaseCommandExecutor>();
+            services.AddTransient<IDataMapper, DataMapper>();
+
+            var loggerConfig = LoggerConfiguration.Default;
+
+            services.AddSingleton<Logging.ILoggerFactory, Logging.LoggerFactory>((provider) =>
+            {
+                return new Logging.LoggerFactory(loggerConfig);
             });
         }
 

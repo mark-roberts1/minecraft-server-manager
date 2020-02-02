@@ -5,121 +5,122 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServerManager.Rest.Data;
+using ServerManager.Rest.Dto;
+using ServerManager.Rest.Utility;
 
 namespace ServerManager.Rest.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ApiController
     {
-        //list
-        /// <summary>
-        /// TODO: Define DTO UserItem
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        [HttpGet("list")]
-        public async Task<IEnumerable<object>> ListAsync(CancellationToken cancellationToken) {
-            throw new NotImplementedException();
-        }
-        //get self
-        /// <summary>
-        /// TODO: Define DTO UserItem
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="cancellationToken"></param>
-        [HttpGet("{userId}/get")]
-        public async Task<IEnumerable<object>> GetSelfAsync([FromRoute] int userId, CancellationToken cancellationToken)
+        private readonly ILinkGenerator _linkGenerator;
+
+        public UserController(IDataAccessLayer dataAccessLayer, ILinkGenerator linkGenerator)
+            : base(dataAccessLayer)
         {
-            throw new NotImplementedException();
-        }
-        
-        [HttpPut("{userId}/updatePassword")]
-        //change password
-        /// <summary>
-        /// TODO: define updatePassword, updateRequest
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="updateRequest"></param>
-        /// <param name="cancellationToken"></param>
-        public async Task<IEnumerable<object>> UpdatePasswordAsync([FromRoute] int userId, [FromBody] object updateRequest, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-        //change username
-        /// <summary>
-        /// TODO: define updateUsername, updateRequest
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="updateRequest"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        [HttpPut("{userId}/updateUsername")]
-        public async Task<IEnumerable<object>> UpdateUsernameAsync([FromRoute] int userId, [FromBody] object updateRequest, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-        //invite user
-        /// <summary>
-        /// TODO: define inviteRequest
-        /// </summary>
-        /// <param name="inviteRequest"></param>
-        /// <param name="cancellationToken"></param>
-        [HttpPost("invite")]
-        public async Task<IEnumerable<object>> InviteUser([FromBody] object inviteRequest, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            _linkGenerator = linkGenerator.ThrowIfNull("linkGenerator");
         }
 
-        //validate link
-        /// <summary>
-        /// TODO: Access data to check link
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="cancellationToken"></param>
-        [HttpGet("{userId}/validate")]
-        
-        public async Task<IEnumerable<object>> ValidateAsync([FromRoute] int userId, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<User> GetSelfAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            ThrowIfUnauthenticated();
+
+            return await GetAuthenticatedUser();
         }
-        //create user(using link)
-        /// <summary>
-        /// TODO: define createAccountRequest
-        /// TODO: create new User object and store information
-        /// </summary>
-        /// <param name="createAccountRequest"></param>
-        /// <param name="cancellationToken"></param>
+
+        [HttpGet("list")]
+        public async Task<IEnumerable<User>> ListAsync(CancellationToken cancellationToken)
+        {
+            ThrowIfUnauthenticated();
+
+            return await DataAccessLayer.GetUsersAsync(cancellationToken);
+        }
+
+        [HttpGet("{userId}/get")]
+        public async Task<User> GetUserAsync([FromRoute] int userId, CancellationToken cancellationToken)
+        {
+            await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
+
+            return await DataAccessLayer.GetUserAsync(userId, cancellationToken);
+        }
+
+        [HttpPut("{userId}/updatePassword")]
+        public async Task<UpdatePasswordResponse> UpdatePasswordAsync([FromRoute] int userId, [FromBody] UpdatePasswordRequest updateRequest, CancellationToken cancellationToken)
+        {
+            await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
+
+            return await DataAccessLayer.UpdateUserPasswordAsync(userId, updateRequest, cancellationToken);
+        }
+
+        [HttpPut("{userId}/updateEmail")]
+        public async Task<UpdateEmailResponse> UpdateEmailAsync([FromRoute] int userId, [FromBody] UpdateEmailRequest updateRequest, CancellationToken cancellationToken)
+        {
+            await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
+
+            return await DataAccessLayer.UpdateUserEmailAsync(userId, updateRequest, cancellationToken);
+        }
+
+        [HttpPost("invite")]
+        public async Task<InviteUserResponse> InviteUserAsync([FromBody] InviteUserRequest inviteRequest, CancellationToken cancellationToken)
+        {
+            ThrowIfUnauthenticated();
+
+            var link = _linkGenerator.GenerateUniqueLink();
+
+
+            var response = new InviteUserResponse
+            {
+                UserInvited = await _linkGenerator.SendInvitationLink(inviteRequest.EmailAddress, link, cancellationToken)
+            };
+
+            if (response.UserInvited)
+            {
+                await DataAccessLayer.StoreInvitationLinkAsync(inviteRequest.EmailAddress, link, cancellationToken);
+            }
+
+            return response;
+        }
+
+        [HttpGet("{link}/validate")]
+        public async Task<LinkValidationResponse> ValidateAsync([FromRoute] string link, CancellationToken cancellationToken)
+        {
+            return new LinkValidationResponse
+            {
+                IsValid = await DataAccessLayer.IsLinkValidAsync(link, cancellationToken)
+            };
+        }
+
         [HttpPost("register")]
-        public async Task<IEnumerable<object>> CreateUser([FromBody] object createAccountRequest, CancellationToken cancellationToken)
+        public async Task<CreateUserResponse> CreateUserAsync([FromBody] CreateUserRequest createAccountRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await DataAccessLayer.CreateUserAsync(createAccountRequest, cancellationToken);
         }
-        //set role
-        /// <summary>
-        /// TODO: define updateRequest
-        /// TODO: create RoleList and assign roles to list
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="updateRequest"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+
         [HttpPut("{userId}/updateRole")]
-        public async Task<IEnumerable<object>> UpdateRoleAsync([FromRoute] int userId, [FromBody] object updateRequest, CancellationToken cancellationToken)
+        public async Task<UpdateRoleResponse> UpdateRoleAsync([FromRoute] int userId, [FromBody] UpdateRoleRequest updateRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            ThrowIfNotAdmin();
+
+            return await DataAccessLayer.UpdateUserRole(userId, updateRequest.UserRole, cancellationToken);
         }
-        //delete
-        /// <summary>
-        /// TODO: define deleteUserRequest
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="deleteUserRequest"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+
         [HttpDelete("{userId}/delete")]
-        public async Task<IEnumerable<object>> Delete([FromRoute] int userId, [FromBody] object deleteUserRequest, CancellationToken cancellationToken)
+        public async Task<DeleteUserResponse> DeleteAsync([FromRoute] int userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
+
+            return await DataAccessLayer.DeleteUserAsync(userId, cancellationToken);
+        }
+
+        [HttpPost("{userId}/togglelock")]
+        public async Task<ToggleUserLockResponse> ToggleUserLockAsync([FromRoute]int userId, CancellationToken cancellationToken)
+        {
+            ThrowIfNotAdmin();
+
+            return await DataAccessLayer.ToggleUserLockAsync(userId, cancellationToken);
         }
     }
 }

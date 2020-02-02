@@ -61,12 +61,5 @@ namespace ServerManager.Rest.Database
                 return false;
             }
         }
-
-        public static T ThrowIfNull<T>(this T instance, string argName)
-        {
-            if (instance == null) throw new ArgumentNullException(argName);
-
-            return instance;
-        }
     }
 }

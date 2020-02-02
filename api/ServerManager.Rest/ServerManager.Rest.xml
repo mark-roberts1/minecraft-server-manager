@@ -6,7 +6,7 @@
     <members>
         <member name="M:ServerManager.Rest.Controllers.ServerController.ListAsync(System.Threading.CancellationToken)">
             <summary>
-            TODO: Define DTO ServerItem
+            Returns all available servers managed with this application
             </summary>
             <param name="cancellationToken"></param>
         </member>
@@ -73,69 +73,6 @@
             </summary>
             <param name="serverId"></param>
             <param name="serverCommandRequest"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.ListAsync(System.Threading.CancellationToken)">
-            <summary>
-            TODO: Define DTO UserItem
-            </summary>
-            <param name="cancellationToken"></param>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.GetSelfAsync(System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            TODO: Define DTO UserItem
-            </summary>
-            <param name="userId"></param>
-            <param name="cancellationToken"></param>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.UpdateUsernameAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
-            <summary>
-            TODO: define updateUsername, updateRequest
-            </summary>
-            <param name="userId"></param>
-            <param name="updateRequest"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.InviteUser(System.Object,System.Threading.CancellationToken)">
-            <summary>
-            TODO: define inviteRequest
-            </summary>
-            <param name="inviteRequest"></param>
-            <param name="cancellationToken"></param>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.ValidateAsync(System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            TODO: Access data to check link
-            </summary>
-            <param name="userId"></param>
-            <param name="cancellationToken"></param>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.CreateUser(System.Object,System.Threading.CancellationToken)">
-            <summary>
-            TODO: define createAccountRequest
-            TODO: create new User object and store information
-            </summary>
-            <param name="createAccountRequest"></param>
-            <param name="cancellationToken"></param>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.UpdateRoleAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
-            <summary>
-            TODO: define updateRequest
-            TODO: create RoleList and assign roles to list
-            </summary>
-            <param name="userId"></param>
-            <param name="updateRequest"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ServerManager.Rest.Controllers.UserController.Delete(System.Int32,System.Object,System.Threading.CancellationToken)">
-            <summary>
-            TODO: define deleteUserRequest
-            </summary>
-            <param name="userId"></param>
-            <param name="deleteUserRequest"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>

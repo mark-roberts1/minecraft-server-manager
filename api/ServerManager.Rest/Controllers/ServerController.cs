@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServerManager.Rest.Dto;
 
 namespace ServerManager.Rest.Controllers
 {
@@ -13,11 +14,11 @@ namespace ServerManager.Rest.Controllers
     public class ServerController : ControllerBase
     {
         /// <summary>
-        /// TODO: Define DTO ServerItem
+        /// Returns all available servers managed with this application
         /// </summary>
         /// <param name="cancellationToken"></param>
         [HttpGet("list")]
-        public async Task<IEnumerable<object>> ListAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Server>> ListAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
