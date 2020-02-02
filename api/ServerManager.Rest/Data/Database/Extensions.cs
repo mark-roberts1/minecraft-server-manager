@@ -66,7 +66,8 @@ namespace ServerManager.Rest.Database
                     value = reader.GetInt64(index);
                 else if (property.PropertyType == typeof(String))
                     value = reader.GetString(index);
-                //else if (property.PropertyType == typeof())
+                else if (property.PropertyType.IsEnum)
+                    value = reader.GetInt32(index);
                 else
                     value = reader.GetValue(index);
 

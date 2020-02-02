@@ -13,11 +13,6 @@ namespace ServerManager.Rest.Controllers
         public ApiController(IDataAccessLayer dataAccessLayer)
         {
             DataAccessLayer = dataAccessLayer;
-
-            if (Request.Headers.TryGetValue("AuthorizationToken", out var sessionTokenVal))
-            {
-                SessionToken = sessionTokenVal.ToString();
-            }
         }
 
         protected bool IsAuthenticated
@@ -54,7 +49,21 @@ namespace ServerManager.Rest.Controllers
         }
 
         protected IDataAccessLayer DataAccessLayer { get; }
-        protected string SessionToken { get; }
+
+        private string _sessionTokenCache;
+
+        protected string SessionToken
+        {
+            get
+            {
+                if (Request.Headers.TryGetValue("AuthorizationToken", out var sessionTokenVal))
+                {
+                    _sessionTokenCache = sessionTokenVal.ToString();
+                }
+
+                return _sessionTokenCache;
+            }
+        }
 
         private User userCache;
         private bool haveCheckedDb = false;

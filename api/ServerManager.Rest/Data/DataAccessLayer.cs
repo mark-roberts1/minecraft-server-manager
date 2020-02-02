@@ -364,7 +364,7 @@ namespace ServerManager.Rest.Data
             try
             {
                 using var connection = _connectionFactory.BuildConnection(_connectionString);
-                using var command = _commandFactory.BuildCommand(UserCommands.UpdateUserEmail,
+                using var command = _commandFactory.BuildCommand(UserCommands.UpdateUserRole,
                     CommandType.Text,
                     connection,
                     DbParameter.From("$UserId", userId),

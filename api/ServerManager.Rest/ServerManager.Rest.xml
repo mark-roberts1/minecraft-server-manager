@@ -221,15 +221,6 @@
             <param name="name"></param>
             <param name="value"></param>
         </member>
-        <member name="M:ServerManager.Rest.Database.DbParameter.From(System.String,System.Object,System.Nullable{System.Data.SqlDbType},System.String)">
-            <summary>
-            Constructs a DbParameter using the provided parameters
-            </summary>
-            <param name="name"></param>
-            <param name="value"></param>
-            <param name="dbType"></param>
-            <param name="typeName"></param>
-        </member>
         <member name="T:ServerManager.Rest.Database.Extensions">
             <summary>
             Extension methods
