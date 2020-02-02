@@ -38,20 +38,37 @@ namespace ServerManager.Rest.Database
 
                 if (index < 0) throw new ArgumentException();
 
-                var fromDb = reader[index];
-
-                if (fromDb == null || fromDb == DBNull.Value)
+                if (reader.IsDBNull(index))
                 {
                     value = null;
                     return true;
                 }
 
-                if (property.PropertyType == typeof(string))
-                {
-                    fromDb = (fromDb as string).Trim();
-                }
-
-                value = fromDb;
+                if (property.PropertyType == typeof(Boolean))
+                    value = reader.GetBoolean(index);
+                else if (property.PropertyType == typeof(Byte))
+                    value = reader.GetByte(index);
+                else if (property.PropertyType == typeof(Char))
+                    value = reader.GetChar(index);
+                else if (property.PropertyType == typeof(DateTime))
+                    value = reader.GetDateTime(index);
+                else if (property.PropertyType == typeof(Double))
+                    value = reader.GetDouble(index);
+                else if (property.PropertyType == typeof(float))
+                    value = reader.GetFloat(index);
+                else if (property.PropertyType == typeof(Guid))
+                    value = reader.GetGuid(index);
+                else if (property.PropertyType == typeof(Int16))
+                    value = reader.GetInt16(index);
+                else if (property.PropertyType == typeof(Int32))
+                    value = reader.GetInt32(index);
+                else if (property.PropertyType == typeof(Int64))
+                    value = reader.GetInt64(index);
+                else if (property.PropertyType == typeof(String))
+                    value = reader.GetString(index);
+                //else if (property.PropertyType == typeof())
+                else
+                    value = reader.GetValue(index);
 
                 return true;
             }

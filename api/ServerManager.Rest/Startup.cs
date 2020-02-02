@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ServerManager.Rest.Data;
 using ServerManager.Rest.Database;
@@ -27,6 +26,7 @@ namespace ServerManager.Rest
         }
 
         public IConfiguration Configuration { get; }
+        private LoggerFactory loggerFactory;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -56,9 +56,11 @@ namespace ServerManager.Rest
 
             var loggerConfig = LoggerConfiguration.Default;
 
+            loggerFactory = new Logging.LoggerFactory(loggerConfig);
+
             services.AddSingleton<Logging.ILoggerFactory, Logging.LoggerFactory>((provider) =>
             {
-                return new Logging.LoggerFactory(loggerConfig);
+                return loggerFactory;
             });
         }
 
@@ -90,6 +92,11 @@ namespace ServerManager.Rest
             });
 
             app.UseMvc();
+
+            var dbStartup = new DatabaseStartupRoutine(Configuration, loggerFactory);
+
+            var startupTask = dbStartup.Start();
+            startupTask.Wait();
         }
     }
 }

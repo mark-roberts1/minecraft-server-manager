@@ -13,6 +13,7 @@ namespace ServerManager.Rest.IO
     public interface IDiskOperator
     {
         bool FileExists(string filename);
+        FileStream CreateFile(string filename);
         bool DirectoryExists(string directory);
         DirectoryInfo CreateDirectory(string directory);
         void MoveFile(string from, string to, bool overwrite);

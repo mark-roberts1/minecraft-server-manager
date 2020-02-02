@@ -234,5 +234,10 @@ namespace ServerManager.Rest.IO
             var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
             return GetDirectoryName(pathToExe);
         }
+
+        public FileStream CreateFile(string filename)
+        {
+            return File.Create(filename);
+        }
     }
 }

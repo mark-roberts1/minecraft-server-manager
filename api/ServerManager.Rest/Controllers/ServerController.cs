@@ -5,14 +5,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServerManager.Rest.Data;
 using ServerManager.Rest.Dto;
 
 namespace ServerManager.Rest.Controllers
 {
     [Route("api/server")]
     [ApiController]
-    public class ServerController : ControllerBase
+    public class ServerController : ApiController
     {
+        public ServerController(IDataAccessLayer dataAccessLayer)
+            : base(dataAccessLayer)
+        {
+
+        }
+
         /// <summary>
         /// Returns all available servers managed with this application
         /// </summary>
