@@ -17,7 +17,7 @@
             <param name="serverId"></param>
             <param name="cancellationToken"></param>
         </member>
-        <member name="M:ServerManager.Rest.Controllers.ServerController.CreateAsync(System.Object,System.Threading.CancellationToken)">
+        <member name="M:ServerManager.Rest.Controllers.ServerController.CreateAsync(ServerManager.Rest.Dto.CreateServerRequest,System.Threading.CancellationToken)">
             <summary>
             TODO: Create the CreateServerRequest, and the CreateServerResponse
             </summary>
@@ -31,7 +31,7 @@
             <param name="serverId"></param>
             <param name="cancellationToken"></param>
         </member>
-        <member name="M:ServerManager.Rest.Controllers.ServerController.UpdateAsync(System.Int32,System.Object,System.Threading.CancellationToken)">
+        <member name="M:ServerManager.Rest.Controllers.ServerController.UpdateAsync(System.Int32,ServerManager.Rest.Dto.UpdateServerRequest,System.Threading.CancellationToken)">
             <summary>
             TODO: Define UpdateServerRequest, UpdateServerResponse
             </summary>
@@ -39,13 +39,13 @@
             <param name="updateRequest"></param>
             <param name="cancellationToken"></param>
         </member>
-        <member name="M:ServerManager.Rest.Controllers.ServerController.TemplatesAsync(System.Threading.CancellationToken)">
+        <member name="M:ServerManager.Rest.Controllers.ServerController.TemplateAsync(System.Threading.CancellationToken)">
             <summary>
             TODO: Define TDO Templates
             </summary>
             <param name="cancellationToken"></param>
         </member>
-        <member name="M:ServerManager.Rest.Controllers.ServerController.ImportAsync(System.Object,System.Threading.CancellationToken)">
+        <member name="M:ServerManager.Rest.Controllers.ServerController.ImportAsync(ServerManager.Rest.Dto.ImportServerRequest,System.Threading.CancellationToken)">
             <summary>
             TODO: Create ImportRequest, and ImportRequestResponse
             </summary>
@@ -67,7 +67,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:ServerManager.Rest.Controllers.ServerController.ExecuteCommand(System.Int32,System.Object,System.Threading.CancellationToken)">
+        <member name="M:ServerManager.Rest.Controllers.ServerController.ExecuteCommand(System.Int32,ServerManager.Rest.Dto.ServerCommandRequest,System.Threading.CancellationToken)">
             <summary>
             TODO: create executor for command
             </summary>
