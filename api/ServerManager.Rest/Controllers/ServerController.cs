@@ -36,7 +36,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="serverId"></param>
         /// <param name="cancellationToken"></param>
         [HttpGet("{serverId}")]
-        public async Task<object> GetAsync([FromRoute] int serverId, CancellationToken cancellationToken)
+        public async Task<Server> GetAsync([FromRoute] int serverId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -47,7 +47,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="createRequest"></param>
         /// <param name="cancellationToken"></param>
         [HttpPost("create")]
-        public async Task<object> CreateAsync([FromBody] object createRequest, CancellationToken cancellationToken)
+        public async Task<CreateServerResponse> CreateAsync([FromBody] CreateServerRequest createRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -58,7 +58,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="serverId"></param>
         /// <param name="cancellationToken"></param>
         [HttpDelete("{serverId}/delete")]
-        public async Task<object> DeleteAsync([FromRoute] int serverId, CancellationToken cancellationToken)
+        public async Task<DeleteServerResponse> DeleteAsync([FromRoute] int serverId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -70,7 +70,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="updateRequest"></param>
         /// <param name="cancellationToken"></param>
         [HttpPut("{serverId}/update")]
-        public async Task<object> UpdateAsync([FromRoute] int serverId, [FromBody] object updateRequest, CancellationToken cancellationToken)
+        public async Task<UpdateServerResponse> UpdateAsync([FromRoute] int serverId, [FromBody] UpdateServerRequest updateRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -81,7 +81,7 @@ namespace ServerManager.Rest.Controllers
         /// </summary>
         /// <param name="cancellationToken"></param>
         [HttpGet("templates")]
-        public async Task<IEnumerable<object>> TemplatesAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Template>> TemplateAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -92,7 +92,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="importRequest"></param>
         /// <param name="cancellationToken"></param>
         [HttpPost("import")]
-        public async Task<IEnumerable<object>> ImportAsync([FromBody] object importRequest, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ImportServerResponse>> ImportAsync([FromBody] ImportServerRequest importRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -103,7 +103,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="serverId"></param>
         /// <param name="cancellationToken"></param>
         [HttpPost("{serverId}/start")]
-        public async Task<IEnumerable<object>> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken) {
+        public async Task<bool> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken) {
             throw new NotImplementedException();
         }
         // TODO: stop 
@@ -114,7 +114,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost("{serverId}/stop")]
-        public async Task<IEnumerable<object>> StopAsync([FromRoute] int serverId, CancellationToken cancellationToken)
+        public async Task<bool> StopAsync([FromRoute] int serverId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -127,7 +127,7 @@ namespace ServerManager.Rest.Controllers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost("{serverId}/executecommand")]
-        public async Task<IEnumerable<object>> ExecuteCommand([FromRoute] int serverId, [FromBody] object serverCommandRequest, CancellationToken cancellationToken)
+        public async Task<ServerCommandResponse> ExecuteCommand([FromRoute] int serverId, [FromBody] ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
