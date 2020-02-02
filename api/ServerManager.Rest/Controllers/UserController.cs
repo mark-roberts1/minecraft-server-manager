@@ -96,6 +96,9 @@ namespace ServerManager.Rest.Controllers
         [HttpPost("register")]
         public async Task<CreateUserResponse> CreateUserAsync([FromBody] CreateUserRequest createAccountRequest, CancellationToken cancellationToken)
         {
+            if (!(await DataAccessLayer.IsLinkValidAsync(createAccountRequest.InvitationLink, cancellationToken)))
+                throw new UnauthorizedAccessException();
+
             return await DataAccessLayer.CreateUserAsync(createAccountRequest, cancellationToken);
         }
 

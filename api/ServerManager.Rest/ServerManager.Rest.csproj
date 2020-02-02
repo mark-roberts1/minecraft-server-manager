@@ -28,4 +28,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.0.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Filters\" />
+  </ItemGroup>
 </Project>

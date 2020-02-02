@@ -50,20 +50,8 @@ namespace ServerManager.Rest.Controllers
 
         protected IDataAccessLayer DataAccessLayer { get; }
 
-        private string _sessionTokenCache;
-
-        protected string SessionToken
-        {
-            get
-            {
-                if (Request.Headers.TryGetValue("AuthorizationToken", out var sessionTokenVal))
-                {
-                    _sessionTokenCache = sessionTokenVal.ToString();
-                }
-
-                return _sessionTokenCache;
-            }
-        }
+        [FromHeader(Name = "SessionToken")]
+        public string SessionToken { get; set; }
 
         private User userCache;
         private bool haveCheckedDb = false;

@@ -52,7 +52,7 @@ namespace ServerManager.Rest.Data
 
         public const string GetUserByLink = @"
             SELECT
-                UserId,
+                u.UserId,
                 Username,
                 MinecraftUsername,
                 Email,
@@ -68,7 +68,7 @@ namespace ServerManager.Rest.Data
 
         public const string GetUserBySessionToken = @"
             SELECT
-                UserId,
+                u.UserId,
                 Username,
                 MinecraftUsername,
                 Email,

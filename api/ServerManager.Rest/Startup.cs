@@ -86,7 +86,7 @@ namespace ServerManager.Rest
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
-            {
+            {               
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 c.RoutePrefix = string.Empty;
             });
