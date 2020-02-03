@@ -8,6 +8,8 @@ namespace ServerManager.Rest.Dto
     public class UpdateServerRequest
     {
         public string NewName { get; set; }
-        public Dictionary<string, string> NewProperties { get; set; }
+        public string Version { get; set; }
+        public string Description { get; set; }
+        public ServerPropertyList NewProperties { get; set; }
     }
 }

@@ -57,11 +57,23 @@ namespace ServerManager.Rest.Controllers
         }
 
         [HttpPost("template/add")]
-        public async Task<AddTemplateResponse> AddTemplateAsync(AddTemplateRequest addTemplateRequest, CancellationToken cancellationToken)
+        public async Task<AddTemplateResponse> AddTemplateAsync([FromBody] AddTemplateRequest addTemplateRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
         
+        [HttpGet("template/{templateId}")]
+        public async Task<Template> GetTemplateAsync([FromRoute] int templateId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("template/{templateId}/update")]
+        public async Task<object> UpdateTemplateAsync([FromBody] object updateTemplateRequest, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost("{serverId}/start")]
         public async Task<bool> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken) {
             throw new NotImplementedException();

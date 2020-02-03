@@ -7,6 +7,6 @@ namespace ServerManager.Rest.Dto
 {
     public class ServerCommandResponse
     {
-        public bool Executed { get; set; }
+        public bool Succeeded { get; set; }
     }
 }
