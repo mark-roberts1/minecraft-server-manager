@@ -32,4 +32,10 @@
   <ItemGroup>
     <Folder Include="Filters\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Rcon.Client">
+      <HintPath>..\InternalPackages\Rcon.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
