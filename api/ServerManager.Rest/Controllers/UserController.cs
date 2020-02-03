@@ -17,8 +17,8 @@ namespace ServerManager.Rest.Controllers
     {
         private readonly ILinkGenerator _linkGenerator;
 
-        public UserController(IDataAccessLayer dataAccessLayer, ILinkGenerator linkGenerator)
-            : base(dataAccessLayer)
+        public UserController(IUserData userData, ILinkGenerator linkGenerator)
+            : base(userData)
         {
             _linkGenerator = linkGenerator.ThrowIfNull("linkGenerator");
         }
@@ -36,7 +36,7 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfUnauthenticated();
 
-            return await DataAccessLayer.GetUsersAsync(cancellationToken);
+            return await UserData.GetUsersAsync(cancellationToken);
         }
 
         [HttpGet("{userId}/get")]
@@ -44,7 +44,7 @@ namespace ServerManager.Rest.Controllers
         {
             await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
 
-            return await DataAccessLayer.GetUserAsync(userId, cancellationToken);
+            return await UserData.GetUserAsync(userId, cancellationToken);
         }
 
         [HttpPut("{userId}/updatePassword")]
@@ -52,7 +52,7 @@ namespace ServerManager.Rest.Controllers
         {
             await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
 
-            return await DataAccessLayer.UpdateUserPasswordAsync(userId, updateRequest, cancellationToken);
+            return await UserData.UpdateUserPasswordAsync(userId, updateRequest, cancellationToken);
         }
 
         [HttpPut("{userId}/updateEmail")]
@@ -60,7 +60,7 @@ namespace ServerManager.Rest.Controllers
         {
             await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
 
-            return await DataAccessLayer.UpdateUserEmailAsync(userId, updateRequest, cancellationToken);
+            return await UserData.UpdateUserEmailAsync(userId, updateRequest, cancellationToken);
         }
 
         [HttpPost("invite")]
@@ -78,7 +78,7 @@ namespace ServerManager.Rest.Controllers
 
             if (response.UserInvited)
             {
-                await DataAccessLayer.StoreInvitationLinkAsync(inviteRequest.EmailAddress, link, cancellationToken);
+                await UserData.StoreInvitationLinkAsync(inviteRequest.EmailAddress, link, cancellationToken);
             }
 
             return response;
@@ -89,17 +89,17 @@ namespace ServerManager.Rest.Controllers
         {
             return new LinkValidationResponse
             {
-                IsValid = await DataAccessLayer.IsLinkValidAsync(link, cancellationToken)
+                IsValid = await UserData.IsLinkValidAsync(link, cancellationToken)
             };
         }
 
         [HttpPost("register")]
         public async Task<CreateUserResponse> CreateUserAsync([FromBody] CreateUserRequest createAccountRequest, CancellationToken cancellationToken)
         {
-            if (!(await DataAccessLayer.IsLinkValidAsync(createAccountRequest.InvitationLink, cancellationToken)))
+            if (!(await UserData.IsLinkValidAsync(createAccountRequest.InvitationLink, cancellationToken)))
                 throw new UnauthorizedAccessException();
 
-            return await DataAccessLayer.CreateUserAsync(createAccountRequest, cancellationToken);
+            return await UserData.CreateUserAsync(createAccountRequest, cancellationToken);
         }
 
         [HttpPut("{userId}/updateRole")]
@@ -107,7 +107,7 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await DataAccessLayer.UpdateUserRole(userId, updateRequest.UserRole, cancellationToken);
+            return await UserData.UpdateUserRole(userId, updateRequest.UserRole, cancellationToken);
         }
 
         [HttpDelete("{userId}/delete")]
@@ -115,7 +115,7 @@ namespace ServerManager.Rest.Controllers
         {
             await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
 
-            return await DataAccessLayer.DeleteUserAsync(userId, cancellationToken);
+            return await UserData.DeleteUserAsync(userId, cancellationToken);
         }
 
         [HttpPost("{userId}/togglelock")]
@@ -123,7 +123,7 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await DataAccessLayer.ToggleUserLockAsync(userId, cancellationToken);
+            return await UserData.ToggleUserLockAsync(userId, cancellationToken);
         }
     }
 }

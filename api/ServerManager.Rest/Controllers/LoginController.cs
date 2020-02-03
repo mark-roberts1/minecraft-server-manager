@@ -18,8 +18,8 @@ namespace ServerManager.Rest.Controllers
     {
         private readonly ILinkGenerator _linkGenerator;
         
-        public LoginController(IDataAccessLayer dataAccessLayer, ILinkGenerator linkGenerator)
-            : base(dataAccessLayer)
+        public LoginController(IUserData userData, ILinkGenerator linkGenerator)
+            : base(userData)
         {
             _linkGenerator = linkGenerator.ThrowIfNull("linkGenerator");
         }
@@ -27,7 +27,7 @@ namespace ServerManager.Rest.Controllers
         [HttpPost("token")]
         public async Task<TokenResponse> LoginAsync([FromBody] LoginRequest loginRequest, CancellationToken cancellationToken)
         {
-            var result = await DataAccessLayer.LoginAsync(loginRequest.ThrowIfNull("loginRequest"), cancellationToken);
+            var result = await UserData.LoginAsync(loginRequest.ThrowIfNull("loginRequest"), cancellationToken);
 
             if (result == PasswordVerificationResult.Failed)
             {
@@ -36,7 +36,7 @@ namespace ServerManager.Rest.Controllers
 
             var token = _linkGenerator.GenerateUniqueLink();
 
-            await DataAccessLayer.StoreUserSessionTokenAsync(loginRequest.Username, token, cancellationToken);
+            await UserData.StoreUserSessionTokenAsync(loginRequest.Username, token, cancellationToken);
 
             return new TokenResponse
             {
@@ -48,12 +48,12 @@ namespace ServerManager.Rest.Controllers
         public async Task<ForgotPasswordResponse> SendPasswordResetEmailAsync(ForgotPasswordRequest forgotPasswordRequest, CancellationToken cancellationToken)
         {
             forgotPasswordRequest.ThrowIfNull("forgotPasswordRequest");
-            var user = await DataAccessLayer.GetUserAsync(forgotPasswordRequest.Username, cancellationToken);
+            var user = await UserData.GetUserAsync(forgotPasswordRequest.Username, cancellationToken);
             var link = _linkGenerator.GenerateUniqueLink();
 
             var sent = await _linkGenerator.SendResetPasswordLink(user, link, cancellationToken);
 
-            await DataAccessLayer.StoreResetPasswordLink(user.UserId, link, cancellationToken);
+            await UserData.StoreResetPasswordLink(user.UserId, link, cancellationToken);
 
             return new ForgotPasswordResponse
             {
@@ -64,13 +64,13 @@ namespace ServerManager.Rest.Controllers
         [HttpPost("resetpassword")]
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request, CancellationToken cancellationToken)
         {
-            var valid = await DataAccessLayer.IsLinkValidAsync(request.Link, cancellationToken);
+            var valid = await UserData.IsLinkValidAsync(request.Link, cancellationToken);
 
             if (!valid) throw new UnauthorizedAccessException();
 
-            var user = await DataAccessLayer.GetUserByLinkAsync(request.Link, cancellationToken);
+            var user = await UserData.GetUserByLinkAsync(request.Link, cancellationToken);
 
-            var response = await DataAccessLayer.ResetUserPasswordAsync(user.UserId, request.NewPassword, cancellationToken);
+            var response = await UserData.ResetUserPasswordAsync(user.UserId, request.NewPassword, cancellationToken);
 
             return response;
         }

@@ -15,7 +15,7 @@ namespace ServerManager.Rest.Dto
         public static implicit operator ServerProperty(string fileLine)
         {
             if (string.IsNullOrWhiteSpace(fileLine)) throw new InvalidCastException("Invalid server property");
-
+            if (fileLine.Trim().StartsWith("#")) throw new InvalidCastException("ServerProperty commented out");
             var vals = fileLine.Split('=');
 
             var prop = new ServerProperty();

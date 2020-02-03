@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using ServerManager.Rest.Data;
 using ServerManager.Rest.Database;
 using ServerManager.Rest.Database.Sqlite;
+using ServerManager.Rest.IO;
 using ServerManager.Rest.Logging;
 using ServerManager.Rest.Utility;
 
@@ -47,12 +48,14 @@ namespace ServerManager.Rest
                 //c.IncludeXmlComments($"ServerManager.Rest.xml");
             });
 
-            services.AddTransient<IDataAccessLayer, DataAccessLayer>();
+            services.AddTransient<IUserData, UserData>();
             services.AddTransient<ILinkGenerator, LinkGenerator>();
             services.AddTransient<IDbConnectionFactory, SqliteConnectionFactory>();
             services.AddTransient<IDbCommandFactory, SqliteCommandFactory>();
             services.AddTransient<ICommandExecutor, DatabaseCommandExecutor>();
             services.AddTransient<IDataMapper, DataMapper>();
+            services.AddTransient<IServerData, ServerData>();
+            services.AddTransient<IDiskOperator, DiskOperator>();
 
             var loggerConfig = LoggerConfiguration.Default;
 

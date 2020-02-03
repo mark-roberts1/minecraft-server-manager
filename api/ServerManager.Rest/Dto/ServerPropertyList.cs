@@ -39,10 +39,46 @@ namespace ServerManager.Rest.Dto
 
             foreach (var line in lines)
             {
-                list.Add(line);
+                try
+                {
+                    list.Add(line);
+                }
+                catch { }
             }
 
             return list;
+        }
+
+        internal int RconPort
+        {
+            get
+            {
+                var prop = this.First(w => w.Key == "rcon.port");
+
+                return int.Parse(prop.Value?.Trim());
+            }
+        }
+
+        internal string RconPassword
+        {
+            get
+            {
+                var prop = this.First(w => w.Key == "rcon.password");
+
+                return prop.Value?.Trim();
+            }
+        }
+
+        internal bool RconEnabled
+        {
+            get
+            {
+                var prop = this.FirstOrDefault(w => w.Key == "enable-rcon");
+
+                if (prop == null) return false;
+
+                return bool.Parse(prop.Value?.Trim());
+            }
         }
     }
 }

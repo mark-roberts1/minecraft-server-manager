@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ServerManager.Rest.Data
 {
-    public class DataAccessLayer : IDataAccessLayer
+    public class UserData : IUserData
     {
         private readonly IDbCommandFactory _commandFactory;
         private readonly IDbConnectionFactory _connectionFactory;
@@ -21,7 +21,7 @@ namespace ServerManager.Rest.Data
         private readonly string _connectionString;
         private readonly IPasswordHasher<User> _passwordHasher;
 
-        public DataAccessLayer(IDbCommandFactory commandFactory, 
+        public UserData(IDbCommandFactory commandFactory, 
             IDbConnectionFactory connectionFactory, 
             ICommandExecutor commandExecutor, 
             ILoggerFactory loggerFactory,
@@ -30,7 +30,7 @@ namespace ServerManager.Rest.Data
             _commandFactory = commandFactory.ThrowIfNull("commandFactory");
             _connectionFactory = connectionFactory.ThrowIfNull("connectionFactory");
             _commandExecutor = commandExecutor.ThrowIfNull("commandExecutor");
-            _logger = loggerFactory.ThrowIfNull("loggerFactory").GetLogger<DataAccessLayer>();
+            _logger = loggerFactory.ThrowIfNull("loggerFactory").GetLogger<UserData>();
             _connectionString = configuration.ThrowIfNull("configuration").GetConnectionString("AppData").ThrowIfNull("connectionString");
             _passwordHasher = new PasswordHasher<User>();
         }

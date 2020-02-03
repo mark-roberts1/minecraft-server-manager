@@ -21,7 +21,7 @@ namespace ServerManager.Rest.Database.Sqlite
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly ICommandExecutor _commandExecutor;
         private readonly IDiskOperator _diskOperator;
-        private readonly IDataAccessLayer _dataAccessLayer;
+        private readonly IUserData _dataAccessLayer;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
 
@@ -35,7 +35,7 @@ namespace ServerManager.Rest.Database.Sqlite
             _commandExecutor = new DatabaseCommandExecutor(new DataMapper());
             _diskOperator = new DiskOperator();
 
-            _dataAccessLayer = new DataAccessLayer(_commandFactory, _connectionFactory, _commandExecutor, loggerFactory, configuration);
+            _dataAccessLayer = new UserData(_commandFactory, _connectionFactory, _commandExecutor, loggerFactory, configuration);
 
             _logger = loggerFactory.GetLogger<DatabaseStartupRoutine>();
             _configuration = configuration;

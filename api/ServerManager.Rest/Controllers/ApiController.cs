@@ -10,9 +10,9 @@ namespace ServerManager.Rest.Controllers
 {
     public abstract class ApiController : ControllerBase
     {
-        public ApiController(IDataAccessLayer dataAccessLayer)
+        public ApiController(IUserData userData)
         {
-            DataAccessLayer = dataAccessLayer;
+            UserData = userData;
         }
 
         protected bool IsAuthenticated
@@ -48,7 +48,7 @@ namespace ServerManager.Rest.Controllers
             }
         }
 
-        protected IDataAccessLayer DataAccessLayer { get; }
+        protected IUserData UserData { get; }
 
         [FromHeader(Name = "SessionToken")]
         public string SessionToken { get; set; }
@@ -60,7 +60,7 @@ namespace ServerManager.Rest.Controllers
         {
             if (userCache == null && !haveCheckedDb)
             {
-                userCache = await DataAccessLayer.GetUserBySessionTokenAsync(SessionToken, default);
+                userCache = await UserData.GetUserBySessionTokenAsync(SessionToken, default);
 
                 haveCheckedDb = true;
             }
