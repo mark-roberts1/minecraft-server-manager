@@ -49,6 +49,15 @@ namespace ServerManager.Rest.Dto
             return list;
         }
 
+        public static implicit operator ServerPropertyList(string blob)
+        {
+            if (blob == null) throw new ArgumentNullException("blob");
+
+            var lines = blob.Split("\n");
+
+            return lines;
+        }
+
         internal int RconPort
         {
             get
@@ -100,6 +109,11 @@ namespace ServerManager.Rest.Dto
             var compareProps = string.Join(' ', props.GetLines().ToArray());
 
             return currentProps == compareProps;
+        }
+
+        public override string ToString()
+        {
+            return string.Join("\n", GetLines().ToArray());
         }
     }
 }
