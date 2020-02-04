@@ -53,9 +53,13 @@ namespace ServerManager.Rest.Management
             isInitialized = true;
         }
 
-        public void Add(ServerInfo server)
+        public async Task AddAsync(ServerInfo server, Template template, CancellationToken cancellationToken)
         {
-            _servers.Add(new ServerWrapper(server, _configuration, _diskOperator, _loggerFactory));
+            var wrapper = new ServerWrapper(server, _configuration, _diskOperator, _loggerFactory);
+
+            await wrapper.DownloadTemplateAsync(template.DownloadLink, cancellationToken);
+
+            _servers.Add(wrapper);
         }
 
         public async Task<DeleteServerResponse> DeleteAsync(int serverId, CancellationToken cancellationToken)
@@ -84,34 +88,59 @@ namespace ServerManager.Rest.Management
             return response;
         }
 
-        public Task<ServerCommandResponse> ExecuteCommand(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
+        public async Task<ServerCommandResponse> ExecuteCommand(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (serverCommandRequest.Command == "stop") throw new InvalidOperationException("Please use the Stop() method to stop the server.");
+
+            var server = _servers.First(w => w.Server.ServerId == serverId);
+
+            return await server.IssueCommandAsync(serverCommandRequest.Command, cancellationToken);
         }
 
         public Task<ServerInfo> GetAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Servers.FirstOrDefault(w => w.ServerId == serverId));
         }
 
         public Task<IEnumerable<ServerInfo>> ListAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Servers);
         }
 
-        public Task<bool> StartAsync(int serverId, CancellationToken cancellationToken)
+        public Task<StartResponse> StartAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var server = _servers.First(w => w.Server.ServerId == serverId);
+
+            return Task.FromResult(server.Start());
         }
 
         public Task<bool> StopAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var server = _servers.First(w => w.Server.ServerId == serverId);
+
+            return server.StopAsync(cancellationToken);
         }
 
-        public Task<UpdateServerResponse> UpdateAsync(int serverId, UpdateServerRequest updateRequest, CancellationToken cancellationToken)
+        public async Task UpdateAsync(int serverId, UpdateServerRequest updateServerRequest, Template template, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var server = _servers.First(w => w.Server.ServerId == serverId);
+
+            server.Server.Description = updateServerRequest.Description;
+            server.Server.Name = updateServerRequest.NewName;
+
+            server.UpdateProperties(updateServerRequest.NewProperties);
+
+            if (server.Server.Version != updateServerRequest.Version)
+            {
+                await server.DownloadTemplateAsync(template.ThrowIfNull("template").DownloadLink, cancellationToken);
+            }
+
+            server.Server.Version = updateServerRequest.Version;
+        }
+
+        public ServerPropertyList GetServerProperties(int serverId)
+        {
+            return _servers.First(w => w.Server.ServerId == serverId).GetPropertiesFile();
         }
     }
 }

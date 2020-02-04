@@ -12,8 +12,7 @@ namespace ServerManager.Rest.Management
         Task<IEnumerable<ServerInfo>> ListAsync(CancellationToken cancellationToken);
         Task<ServerInfo> GetAsync(int serverId, CancellationToken cancellationToken);
         Task<DeleteServerResponse> DeleteAsync(int serverId, CancellationToken cancellationToken);
-        Task<UpdateServerResponse> UpdateAsync(int serverId, UpdateServerRequest updateRequest, CancellationToken cancellationToken);
-        Task<bool> StartAsync(int serverId, CancellationToken cancellationToken);
+        Task<StartResponse> StartAsync(int serverId, CancellationToken cancellationToken);
         Task<bool> StopAsync(int serverId, CancellationToken cancellationToken);
         Task<ServerCommandResponse> ExecuteCommand(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken);
     }

@@ -15,6 +15,7 @@ using ServerManager.Rest.Database;
 using ServerManager.Rest.Database.Sqlite;
 using ServerManager.Rest.IO;
 using ServerManager.Rest.Logging;
+using ServerManager.Rest.Management;
 using ServerManager.Rest.Utility;
 
 namespace ServerManager.Rest
@@ -54,14 +55,15 @@ namespace ServerManager.Rest
             services.AddTransient<IDbCommandFactory, SqliteCommandFactory>();
             services.AddTransient<ICommandExecutor, DatabaseCommandExecutor>();
             services.AddTransient<IDataMapper, DataMapper>();
+            services.AddTransient<IServerManager, Management.ServerManager>();
             services.AddTransient<IServerData, ServerData>();
             services.AddTransient<IDiskOperator, DiskOperator>();
 
             var loggerConfig = LoggerConfiguration.Default;
 
-            loggerFactory = new Logging.LoggerFactory(loggerConfig);
+            loggerFactory = new LoggerFactory(loggerConfig);
 
-            services.AddSingleton<Logging.ILoggerFactory, Logging.LoggerFactory>((provider) =>
+            services.AddSingleton<ILoggerFactory, LoggerFactory>((provider) =>
             {
                 return loggerFactory;
             });

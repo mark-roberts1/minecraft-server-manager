@@ -1,4 +1,5 @@
 ﻿using ServerManager.Rest.Dto;
+using ServerManager.Rest.Management;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace ServerManager.Rest.Data
 {
     public class ServerData : IServerData
     {
+        private readonly IServerManager _serverManager;
+
+        public ServerData(IServerManager serverManager)
+        {
+            _serverManager = serverManager;
+        }
+
         public Task<AddTemplateResponse> AddTemplateAsync(AddTemplateRequest addTemplateRequest, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -49,7 +57,7 @@ namespace ServerManager.Rest.Data
             throw new NotImplementedException();
         }
 
-        public Task<bool> StartAsync(int serverId, CancellationToken cancellationToken)
+        public Task<StartResponse> StartAsync(int serverId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -80,5 +80,26 @@ namespace ServerManager.Rest.Dto
                 return bool.Parse(prop.Value?.Trim());
             }
         }
+
+        public IEnumerable<string> GetLines()
+        {
+            foreach (var item in this)
+                yield return item.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ServerPropertyList props)) return false;
+
+            var currentProps = string.Join(' ', GetLines().ToArray());
+            var compareProps = string.Join(' ', props.GetLines().ToArray());
+
+            return currentProps == compareProps;
+        }
     }
 }

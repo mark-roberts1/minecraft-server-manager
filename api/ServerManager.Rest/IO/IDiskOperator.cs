@@ -12,6 +12,8 @@ namespace ServerManager.Rest.IO
     /// </summary>
     public interface IDiskOperator
     {
+        string[] ReadFileLines(string filename);
+        void WriteAllLines(string path, string[] lines);
         bool FileExists(string filename);
         FileStream CreateFile(string filename);
         bool DirectoryExists(string directory);

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerManager.Rest.Management
@@ -11,6 +12,8 @@ namespace ServerManager.Rest.Management
         bool IsInitialized { get; }
         IEnumerable<ServerInfo> Servers { get; }
         void Initialize(IEnumerable<ServerInfo> servers);
-        void Add(ServerInfo server);
+        Task AddAsync(ServerInfo server, Template template, CancellationToken cancellationToken);
+        Task UpdateAsync(int serverId, UpdateServerRequest updateServerRequest, Template template, CancellationToken cancellationToken);
+        ServerPropertyList GetServerProperties(int serverId);
     }
 }

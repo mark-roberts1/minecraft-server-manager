@@ -95,7 +95,7 @@ namespace ServerManager.Rest.Controllers
         }
 
         [HttpPost("{serverId}/start")]
-        public async Task<bool> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken)
+        public async Task<StartResponse> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken)
         {
             ThrowIfNotAdmin();
 

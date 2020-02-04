@@ -26,5 +26,10 @@ namespace ServerManager.Rest.Dto
 
             return prop;
         }
+
+        public override string ToString()
+        {
+            return string.Join('=', Key, Value);
+        }
     }
 }

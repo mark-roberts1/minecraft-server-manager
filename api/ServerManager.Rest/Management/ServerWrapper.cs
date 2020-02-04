@@ -9,6 +9,7 @@ using Rcon.Client;
 using ServerManager.Rest.Dto;
 using ServerManager.Rest.IO;
 using System.Threading;
+using System.Net;
 
 namespace ServerManager.Rest.Management
 {
@@ -16,9 +17,11 @@ namespace ServerManager.Rest.Management
     {
         private bool disposed;
         private IRconClient rconClient;
+        private readonly IDiskOperator _diskOperator;
         private readonly ILogger _logger;
         private readonly string _serverPath;
         private bool authenticated;
+        private string _propertiesPath => _diskOperator.CombinePaths(_serverPath, "server.properties");
 
         public ServerWrapper(ServerInfo serverInfo, IConfiguration configuration, IDiskOperator diskOperator, ILoggerFactory loggerFactory)
         {
@@ -29,6 +32,7 @@ namespace ServerManager.Rest.Management
 
             _logger = loggerFactory.GetLogger<ServerWrapper>();
             _serverPath = diskOperator.CombinePaths(serversBasePath, serverInfo.GetUniqueServerName());
+            _diskOperator = diskOperator;
 
             RefreshSettings();
         }
@@ -69,6 +73,8 @@ namespace ServerManager.Rest.Management
 
             process.WaitForExit();
 
+            Server.Status = ServerStatus.Started;
+
             return resp;
         }
 
@@ -77,10 +83,11 @@ namespace ServerManager.Rest.Management
             if (rconClient == null) throw new InvalidOperationException("RCON is not enabled on this server.");
 
             LoginIfNecessary();
-
+            
             try
             {
                 var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand("stop"), cancellationToken);
+                Server.Status = ServerStatus.Stopped;
                 return true;
             }
             catch (Exception ex)
@@ -99,6 +106,7 @@ namespace ServerManager.Rest.Management
             try
             {
                 var response = rconClient.ExecuteCommand(RconCommand.ServerCommand("stop"));
+                Server.Status = ServerStatus.Stopped;
                 return true;
             }
             catch (Exception ex)
@@ -108,7 +116,7 @@ namespace ServerManager.Rest.Management
             }
         }
 
-        public async Task<ServerCommandResponse> IssueCommand(string command)
+        public async Task<ServerCommandResponse> IssueCommandAsync(string command, CancellationToken cancellationToken)
         {
             if (rconClient == null) throw new InvalidOperationException("RCON is not enabled on this server.");
 
@@ -116,7 +124,7 @@ namespace ServerManager.Rest.Management
 
             try
             {
-                var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand(command));
+                var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand(command), cancellationToken);
 
                 return new ServerCommandResponse
                 {
@@ -164,6 +172,92 @@ namespace ServerManager.Rest.Management
                 rconClient?.Dispose();
                 disposed = true;
             }
+        }
+
+        public void UpdateProperties(ServerPropertyList properties)
+        {
+            if (properties.Equals(Server.Properties)) return;
+
+            var wasRunning = Server.Status == ServerStatus.Started;
+
+            if (wasRunning)
+            {
+                Stop();
+            }
+
+            if (_diskOperator.FileExists(_propertiesPath))
+            {
+                _diskOperator.DeleteFile(_propertiesPath);
+            }
+
+            using (var stream = _diskOperator.CreateFile(_propertiesPath))
+            {
+            }
+
+            _diskOperator.WriteAllLines(_propertiesPath, properties.GetLines().ToArray());
+            
+            Server.Properties = properties;
+
+            if (wasRunning)
+            {
+                Start();
+            }
+        }
+
+        public async Task DownloadTemplateAsync(string link, CancellationToken cancellationToken)
+        {
+            var wasRunning = Server.Status == ServerStatus.Started;
+
+            if (wasRunning)
+            {
+                Stop();
+            }
+
+            if (_diskOperator.FileExists(_diskOperator.CombinePaths(_serverPath, "server.jar")))
+            {
+                _diskOperator.DeleteFile(_diskOperator.CombinePaths(_serverPath, "server.jar"));
+            }
+
+            using (var client = new WebClient())
+            {
+                bool downloaded = false;
+
+                client.DownloadFileCompleted += (object sender, System.ComponentModel.AsyncCompletedEventArgs e) =>
+                {
+                    downloaded = true;
+                };
+
+                client.DownloadFileAsync(new Uri(link), _diskOperator.CombinePaths(_serverPath, "server.jar"));
+
+                try
+                {
+                    while (!downloaded)
+                    {
+                        await Task.Delay(1, cancellationToken);
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    client.CancelAsync();
+
+                    throw;
+                }
+            }
+
+            if (wasRunning)
+            {
+                Start();
+            }
+        }
+
+        public string[] GetPropertiesFile()
+        {
+            if (!_diskOperator.FileExists(_propertiesPath))
+            {
+                return new string[] { };
+            }
+
+            return _diskOperator.ReadFileLines(_propertiesPath);
         }
     }
 }

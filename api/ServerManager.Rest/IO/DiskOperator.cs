@@ -239,5 +239,15 @@ namespace ServerManager.Rest.IO
         {
             return File.Create(filename);
         }
+
+        public string[] ReadFileLines(string filename)
+        {
+            return File.ReadAllLines(filename);
+        }
+
+        public void WriteAllLines(string path, string[] lines)
+        {
+            File.WriteAllText(path, string.Join("\n", lines));
+        }
     }
 }

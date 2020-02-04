@@ -16,7 +16,7 @@ namespace ServerManager.Rest.Dto
         public ServerPropertyList Properties { get; set; }
 
         internal string GetUniqueServerName()
-            => $"{ServerId}_{Name}_{Version}";
+            => $"{ServerId}";
     }
 
     public enum ServerStatus
