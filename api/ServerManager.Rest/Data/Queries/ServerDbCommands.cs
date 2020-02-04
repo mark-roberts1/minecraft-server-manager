@@ -63,5 +63,67 @@ namespace ServerManager.Rest.Data
                     ON s.ServerId = sp.ServerId
             WHERE
                 s.ServerId = $ServerId;";
+        public const string UpdateTemplate = @"
+        UPDATE
+            Template
+        SET
+            Name = $Name
+            Description = $Description
+            Version = $Version
+            DownloadLink = $DownloadLink
+        WHERE
+            TemplateId = $TemplateId
+        ";
+        public const string UpdateServer = @"
+        UPDATE
+            Server
+        SET
+            Name=$Name
+            Version=$Version
+            Description=$Description
+            Properties=$Properties
+        WHERE
+            ServerId = $ServerId
+        ";
+        public const string UpdateServerStatus = @"
+        UPDATE
+            Server
+        SET
+            ServerStatus = $ServerStatus
+        WHERE
+            ServerId = $ServerId
+        ";
+        public const string ListTemplates = @"
+        SELECT
+            TemplateId,
+            Name,
+            Description,
+            Version,
+            DownloadLink,
+            Properties
+        FROM
+            Templates
+        ";
+        public const string ListServers = @"
+        SELECT
+            ServerId,
+            Name,
+            Description,
+            Version,
+            Properties
+        FROM
+            Templates
+        ";
+        public const string GetTemplate = @"
+        SELECT
+            Name,
+            Description,
+            Version,
+            Properties
+        FROM
+            Templates
+        WHERE
+            TemplateId = $TemplateId
+        ";
     }
 }
