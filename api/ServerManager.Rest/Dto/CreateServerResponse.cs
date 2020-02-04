@@ -7,6 +7,7 @@ namespace ServerManager.Rest.Dto
 {
     public class CreateServerResponse
     {
+        public int ServerId { get; set; }
         public bool Created { get; set; }
     }
 }

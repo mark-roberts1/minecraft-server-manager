@@ -79,6 +79,8 @@ namespace ServerManager.Rest.Management
                 await wrapper.StopAsync(cancellationToken);
             }
 
+            wrapper.DeleteFolder();
+
             _servers.Remove(wrapper);
 
             wrapper.Dispose();
@@ -88,7 +90,7 @@ namespace ServerManager.Rest.Management
             return response;
         }
 
-        public async Task<ServerCommandResponse> ExecuteCommand(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
+        public async Task<ServerCommandResponse> ExecuteCommandAsync(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
         {
             if (serverCommandRequest.Command == "stop") throw new InvalidOperationException("Please use the Stop() method to stop the server.");
 

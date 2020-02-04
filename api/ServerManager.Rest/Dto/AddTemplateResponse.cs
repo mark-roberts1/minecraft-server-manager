@@ -8,5 +8,6 @@ namespace ServerManager.Rest.Dto
     public class AddTemplateResponse
     {
         public bool TemplateAdded { get; set; }
+        public int TemplateId { get; set; }
     }
 }

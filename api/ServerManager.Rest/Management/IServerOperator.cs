@@ -14,6 +14,6 @@ namespace ServerManager.Rest.Management
         Task<DeleteServerResponse> DeleteAsync(int serverId, CancellationToken cancellationToken);
         Task<StartResponse> StartAsync(int serverId, CancellationToken cancellationToken);
         Task<bool> StopAsync(int serverId, CancellationToken cancellationToken);
-        Task<ServerCommandResponse> ExecuteCommand(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken);
+        Task<ServerCommandResponse> ExecuteCommandAsync(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken);
     }
 }

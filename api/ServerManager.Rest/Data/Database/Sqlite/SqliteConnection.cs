@@ -13,6 +13,7 @@ namespace ServerManager.Rest.Database.Sqlite
         private bool disposed;
         public SQLiteConnection Connection { get; }
 
+        public bool IsOpen { get; private set; }
         public SqliteConnection(string connectionString)
         {
             Connection = new SQLiteConnection(connectionString);
@@ -42,9 +43,12 @@ namespace ServerManager.Rest.Database.Sqlite
 
         public async Task OpenAsync(CancellationToken cancellationToken)
         {
+            if (IsOpen) return;
+
             try
             {
                 await Connection.OpenAsync(cancellationToken);
+                IsOpen = true;
             }
             catch (Exception ex)
             {
@@ -54,9 +58,12 @@ namespace ServerManager.Rest.Database.Sqlite
 
         public async Task OpenAsync()
         {
+            if (IsOpen) return;
+
             try
             {
                 await Connection.OpenAsync();
+                IsOpen = true;
             }
             catch (Exception ex)
             {
@@ -66,9 +73,12 @@ namespace ServerManager.Rest.Database.Sqlite
 
         public void Open()
         {
+            if (IsOpen) return;
+
             try
             {
                 Connection.Open();
+                IsOpen = true;
             }
             catch (Exception ex)
             {

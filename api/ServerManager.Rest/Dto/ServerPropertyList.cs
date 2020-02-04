@@ -9,11 +9,6 @@ namespace ServerManager.Rest.Dto
     {
         public ServerPropertyList() { }
 
-        public ServerPropertyList(IEnumerable<ServerProperty> props)
-        {
-            AddRange(props);
-        }
-
         public new void Add(ServerProperty serverProperty)
         {
             if (serverProperty == null) throw new ArgumentNullException("serverProperty");

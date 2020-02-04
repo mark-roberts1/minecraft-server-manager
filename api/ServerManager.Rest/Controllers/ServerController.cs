@@ -115,7 +115,7 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await _serverData.ExecuteCommand(serverId, serverCommandRequest, cancellationToken);
+            return await _serverData.ExecuteCommandAsync(serverId, serverCommandRequest, cancellationToken);
         }
     }
 }

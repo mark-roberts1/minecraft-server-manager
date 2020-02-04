@@ -53,10 +53,18 @@ namespace ServerManager.Rest.Management
 
         public StartResponse Start()
         {
+            if (!_diskOperator.FileExists(_diskOperator.CombinePaths(_serverPath, "eula.txt")))
+            {
+                using (_diskOperator.CreateFile(_diskOperator.CombinePaths(_serverPath, "eula.txt"))) { }
+
+                _diskOperator.WriteAllLines(_diskOperator.CombinePaths(_serverPath, "eula.txt"), new string[] { "eula=true" });
+            }
+
             var resp = new StartResponse();
 
             using var process = new Process
             {
+                // TODO: Make this work for windows or linux
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "/bin/bash",
@@ -202,6 +210,11 @@ namespace ServerManager.Rest.Management
             {
                 Start();
             }
+        }
+
+        public void DeleteFolder()
+        {
+            _diskOperator.DeleteDirectory(_serverPath, true);
         }
 
         public async Task DownloadTemplateAsync(string link, CancellationToken cancellationToken)

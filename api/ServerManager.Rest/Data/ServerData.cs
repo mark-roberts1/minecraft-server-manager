@@ -1,7 +1,11 @@
-﻿using ServerManager.Rest.Dto;
+﻿using Microsoft.Extensions.Configuration;
+using ServerManager.Rest.Database;
+using ServerManager.Rest.Dto;
+using ServerManager.Rest.Logging;
 using ServerManager.Rest.Management;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,70 +15,332 @@ namespace ServerManager.Rest.Data
     public class ServerData : IServerData
     {
         private readonly IServerManager _serverManager;
+        private readonly IDbCommandFactory _commandFactory;
+        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly ICommandExecutor _commandExecutor;
+        private readonly ILogger _logger;
+        private readonly string _connectionString;
 
-        public ServerData(IServerManager serverManager)
+        public ServerData(IServerManager serverManager,
+            IDbCommandFactory commandFactory,
+            IDbConnectionFactory connectionFactory,
+            ICommandExecutor commandExecutor,
+            ILoggerFactory loggerFactory,
+            IConfiguration configuration)
         {
-            _serverManager = serverManager;
+            _serverManager = serverManager.ThrowIfNull("serverManager");
+            _commandFactory = commandFactory.ThrowIfNull("commandFactory");
+            _connectionFactory = connectionFactory.ThrowIfNull("connectionFactory");
+            _commandExecutor = commandExecutor.ThrowIfNull("commandExecutor");
+            _logger = loggerFactory.ThrowIfNull("loggerFactory").GetLogger<ServerData>();
+            _connectionString = configuration.ThrowIfNull("configuration").GetConnectionString("AppData").ThrowIfNull("connectionString");
+
+            if (!_serverManager.IsInitialized)
+            {
+                var serversTask = ListAsync(default);
+                serversTask.Wait();
+                _serverManager.Initialize(serversTask.Result);
+            }
         }
 
-        public Task<AddTemplateResponse> AddTemplateAsync(AddTemplateRequest addTemplateRequest, CancellationToken cancellationToken)
+        public async Task<AddTemplateResponse> AddTemplateAsync(AddTemplateRequest addTemplateRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = new AddTemplateResponse();
+
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.InsertTemplate, CommandType.Text, connection,
+                    DbParameter.From("$Name", addTemplateRequest.Name),
+                    DbParameter.From("$Description", addTemplateRequest.Description),
+                    DbParameter.From("$Version", addTemplateRequest.Version),
+                    DbParameter.From("$DownloadLink", addTemplateRequest.DownloadLink));
+
+                response.TemplateId = await _commandExecutor.ExecuteScalarAsync<int>(command, cancellationToken);
+                response.TemplateAdded = true;
+            }
+            catch (Exception e)
+            {
+                response.TemplateAdded = false;
+                _logger.Log(LogLevel.Error, e);
+                throw;
+            }
+
+            return response;
         }
 
-        public Task<CreateServerResponse> CreateAsync(CreateServerRequest createRequest, CancellationToken cancellationToken)
+        public async Task<CreateServerResponse> CreateAsync(CreateServerRequest createRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = new CreateServerResponse();
+
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command1 = _commandFactory.BuildCommand(ServerDbCommands.InsertServer, CommandType.Text, connection,
+                    DbParameter.From("$Name", createRequest.Name),
+                    DbParameter.From("$Description", createRequest.Description),
+                    DbParameter.From("$Version", createRequest.Version));
+
+                response.ServerId = await _commandExecutor.ExecuteScalarAsync<int>(command1, cancellationToken);
+
+                using var command2 = _commandFactory.BuildCommand(ServerDbCommands.InsertServerProperties, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", response.ServerId),
+                    DbParameter.From("$Properties", createRequest.Properties.ToString()));
+
+                await _commandExecutor.ExecuteNonQueryAsync(command2, cancellationToken);
+
+                var template = await GetTemplateAsync(createRequest.Version, cancellationToken);
+
+                await _serverManager.AddAsync(await GetAsync(response.ServerId, cancellationToken), template, cancellationToken);
+
+                response.Created = true;
+            }
+            catch (Exception e)
+            {
+                response.Created = false;
+                _logger.Log(LogLevel.Error, e);
+                throw;
+            }
+
+            return response;
         }
 
-        public Task<DeleteServerResponse> DeleteAsync(int serverId, CancellationToken cancellationToken)
+        private async Task<Template> GetTemplateAsync(string version, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.SelectTemplateByVersion, CommandType.Text, connection,
+                    DbParameter.From("$Version", version));
+
+                return await _commandExecutor.ExecuteSingleAsync<Template>(command, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.Log(LogLevel.Error, e);
+                throw;
+            }
         }
 
-        public Task<ServerCommandResponse> ExecuteCommand(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
+        public async Task<DeleteServerResponse> DeleteAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = new DeleteServerResponse();
+
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.DeleteServer, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", serverId));
+
+                var affected = await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
+
+                response.ServerDeleted = 
+                    affected > 0
+                    && (await _serverManager.DeleteAsync(serverId, cancellationToken)).ServerDeleted;
+            }
+            catch (Exception e)
+            {
+                response.ServerDeleted = false;
+                _logger.Log(LogLevel.Error, e);
+                throw;
+            }
+
+            return response;
         }
 
-        public Task<ServerInfo> GetAsync(int serverId, CancellationToken cancellationToken)
+        public async Task<ServerCommandResponse> ExecuteCommandAsync(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _serverManager.ExecuteCommandAsync(serverId, serverCommandRequest, cancellationToken);
         }
 
-        public Task<Template> GetTemplateAsync(int templateId, CancellationToken cancellationToken)
+        public async Task<ServerInfo> GetAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.SelectServer, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", serverId));
+
+                return await _commandExecutor.ExecuteSingleAsync<ServerInfo>(command, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                throw;
+            }
         }
 
-        public Task<IEnumerable<ServerInfo>> ListAsync(CancellationToken cancellationToken)
+        public async Task<Template> GetTemplateAsync(int templateId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.SelectTemplate, CommandType.Text, connection,
+                    DbParameter.From("$TemplateId", templateId));
+
+                return await _commandExecutor.ExecuteSingleAsync<Template>(command, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                throw;
+            }
         }
 
-        public Task<IEnumerable<Template>> ListTemplatesAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ServerInfo>> ListAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.ListServers, CommandType.Text, connection);
+
+                return await _commandExecutor.ExecuteAsync<ServerInfo>(command, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                throw;
+            }
         }
 
-        public Task<StartResponse> StartAsync(int serverId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Template>> ListTemplatesAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.SelectTemplates, CommandType.Text, connection);
+
+                return await _commandExecutor.ExecuteAsync<Template>(command, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                throw;
+            }
         }
 
-        public Task<bool> StopAsync(int serverId, CancellationToken cancellationToken)
+        public async Task<StartResponse> StartAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = new StartResponse();
+
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.UpdateServerStatus, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", serverId),
+                    DbParameter.From("$Status", ServerStatus.Started));
+
+                await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
+
+                return await _serverManager.StartAsync(serverId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                response.DidStart = false;
+                response.Log = ex.PrintFull();
+            }
+
+            return response;
         }
 
-        public Task<UpdateServerResponse> UpdateAsync(int serverId, UpdateServerRequest updateRequest, CancellationToken cancellationToken)
+        public async Task<bool> StopAsync(int serverId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.UpdateServerStatus, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", serverId),
+                    DbParameter.From("$Status", ServerStatus.Stopped));
+
+                await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
+
+                return await _serverManager.StopAsync(serverId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                return false;
+            }
         }
 
-        public Task<UpdateTemplateResponse> UpdateTemplateAsync(UpdateTemplateRequest updateTemplateRequest, CancellationToken cancellationToken)
+        public async Task<UpdateServerResponse> UpdateAsync(int serverId, UpdateServerRequest updateRequest, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = new UpdateServerResponse();
+
+            try
+            {
+                var server = await GetAsync(serverId, cancellationToken);
+
+                Template template = null;
+
+                if (server.Version != updateRequest.Version)
+                {
+                    template = await GetTemplateAsync(updateRequest.Version, cancellationToken);
+                }
+
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+
+                using var command1 = _commandFactory.BuildCommand(ServerDbCommands.UpdateServer, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", serverId),
+                    DbParameter.From("$Name", updateRequest.NewName),
+                    DbParameter.From("$Version", updateRequest.Version),
+                    DbParameter.From("$Description", updateRequest.Description));
+
+                await _commandExecutor.ExecuteNonQueryAsync(command1, cancellationToken);
+
+                using var command2 = _commandFactory.BuildCommand(ServerDbCommands.UpdateServerProperties, CommandType.Text, connection,
+                    DbParameter.From("$ServerId", serverId),
+                    DbParameter.From("$Properties", updateRequest.NewProperties));
+
+                await _commandExecutor.ExecuteNonQueryAsync(command2, cancellationToken);
+
+                await _serverManager.UpdateAsync(serverId, updateRequest, template, cancellationToken);
+
+                response.Updated = true;
+            }
+            catch (Exception ex)
+            {
+                response.Updated = false;
+                _logger.Log(LogLevel.Error, ex);
+            }
+
+            return response;
+        }
+
+        public async Task<UpdateTemplateResponse> UpdateTemplateAsync(UpdateTemplateRequest updateTemplateRequest, CancellationToken cancellationToken)
+        {
+            var response = new UpdateTemplateResponse();
+
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+                using var command = _commandFactory.BuildCommand(ServerDbCommands.UpdateTemplate, CommandType.Text, connection,
+                    DbParameter.From("$Name", updateTemplateRequest.Name),
+                    DbParameter.From("$Description", updateTemplateRequest.Description),
+                    DbParameter.From("$Version", updateTemplateRequest.Version),
+                    DbParameter.From("$DownloadLink", updateTemplateRequest.DownloadLink),
+                    DbParameter.From("$TemplateId", updateTemplateRequest.TemplateId));
+
+                await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
+                
+                response.Updated = true;
+            }
+            catch (Exception ex)
+            {
+                response.Updated = false;
+                _logger.Log(LogLevel.Error, ex);
+            }
+
+            return response;
         }
     }
 }

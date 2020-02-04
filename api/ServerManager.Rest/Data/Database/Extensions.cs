@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerManager.Rest.Dto;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -44,30 +45,32 @@ namespace ServerManager.Rest.Database
                     return true;
                 }
 
-                if (property.PropertyType == typeof(Boolean))
+                if (property.PropertyType == typeof(bool))
                     value = reader.GetBoolean(index);
-                else if (property.PropertyType == typeof(Byte))
+                else if (property.PropertyType == typeof(byte))
                     value = reader.GetByte(index);
-                else if (property.PropertyType == typeof(Char))
+                else if (property.PropertyType == typeof(char))
                     value = reader.GetChar(index);
                 else if (property.PropertyType == typeof(DateTime))
                     value = reader.GetDateTime(index);
-                else if (property.PropertyType == typeof(Double))
+                else if (property.PropertyType == typeof(double))
                     value = reader.GetDouble(index);
                 else if (property.PropertyType == typeof(float))
                     value = reader.GetFloat(index);
                 else if (property.PropertyType == typeof(Guid))
                     value = reader.GetGuid(index);
-                else if (property.PropertyType == typeof(Int16))
+                else if (property.PropertyType == typeof(short))
                     value = reader.GetInt16(index);
-                else if (property.PropertyType == typeof(Int32))
+                else if (property.PropertyType == typeof(int))
                     value = reader.GetInt32(index);
-                else if (property.PropertyType == typeof(Int64))
+                else if (property.PropertyType == typeof(long))
                     value = reader.GetInt64(index);
-                else if (property.PropertyType == typeof(String))
+                else if (property.PropertyType == typeof(string))
                     value = reader.GetString(index);
                 else if (property.PropertyType.IsEnum)
                     value = reader.GetInt32(index);
+                else if (property.PropertyType == typeof(ServerPropertyList))
+                    value = reader.GetString(index);
                 else
                     value = reader.GetValue(index);
 
