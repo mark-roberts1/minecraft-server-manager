@@ -30,12 +30,19 @@ namespace ServerManager.Rest.Database
 
             command.Connection.Open();
 
-            using (var reader = command.ExecuteReader())
+            try
             {
-                results = _dataMapper.Map<T>(reader);
-            }
+                using (var reader = command.ExecuteReader())
+                {
+                    results = _dataMapper.Map<T>(reader);
+                }
 
-            return results;
+                return results;
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -46,12 +53,20 @@ namespace ServerManager.Rest.Database
             IEnumerable<T> results;
 
             await command.Connection.OpenAsync(cancellationToken);
-            using (var reader = await command.ExecuteReaderAsync(cancellationToken))
-            {
-                results = _dataMapper.Map<T>(reader);
-            }
 
-            return results;
+            try
+            {
+                using (var reader = await command.ExecuteReaderAsync(cancellationToken))
+                {
+                    results = _dataMapper.Map<T>(reader);
+                }
+
+                return results;
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -63,12 +78,19 @@ namespace ServerManager.Rest.Database
 
             await command.Connection.OpenAsync();
 
-            using (var reader = await command.ExecuteReaderAsync())
+            try
             {
-                results = _dataMapper.Map<T>(reader);
-            }
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    results = _dataMapper.Map<T>(reader);
+                }
 
-            return results;
+                return results;
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -78,7 +100,14 @@ namespace ServerManager.Rest.Database
 
             command.Connection.Open();
 
-            return command.ExecuteNonQuery();
+            try
+            {
+                return command.ExecuteNonQuery();
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -87,7 +116,15 @@ namespace ServerManager.Rest.Database
             command.ThrowIfNull("command");
 
             await command.Connection.OpenAsync(cancellationToken);
-            return await command.ExecuteNonQueryAsync(cancellationToken);
+
+            try
+            {
+                return await command.ExecuteNonQueryAsync(cancellationToken);
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -97,7 +134,14 @@ namespace ServerManager.Rest.Database
 
             await command.Connection.OpenAsync();
 
-            return await command.ExecuteNonQueryAsync();
+            try
+            {
+                return await command.ExecuteNonQueryAsync();
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -107,9 +151,16 @@ namespace ServerManager.Rest.Database
 
             command.Connection.Open();
 
-            object scalarValue = command.ExecuteScalar();
+            try
+            {
+                object scalarValue = command.ExecuteScalar();
 
-            return (T)Convert.ChangeType(scalarValue, typeof(T));
+                return (T)Convert.ChangeType(scalarValue, typeof(T));
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -118,9 +169,17 @@ namespace ServerManager.Rest.Database
             command.ThrowIfNull("command");
 
             await command.Connection.OpenAsync(cancellationToken);
-            object scalarValue = await command.ExecuteScalarAsync(cancellationToken);
 
-            return (T)Convert.ChangeType(scalarValue, typeof(T));
+            try
+            {
+                object scalarValue = await command.ExecuteScalarAsync(cancellationToken);
+
+                return (T)Convert.ChangeType(scalarValue, typeof(T));
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -129,9 +188,17 @@ namespace ServerManager.Rest.Database
             command.ThrowIfNull("command");
 
             await command.Connection.OpenAsync();
-            object scalarValue = await command.ExecuteScalarAsync();
 
-            return (T)Convert.ChangeType(scalarValue, typeof(T));
+            try
+            {
+                object scalarValue = await command.ExecuteScalarAsync();
+
+                return (T)Convert.ChangeType(scalarValue, typeof(T));
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -143,12 +210,19 @@ namespace ServerManager.Rest.Database
 
             command.Connection.Open();
 
-            using (var reader = command.ExecuteReader())
+            try
             {
-                result = _dataMapper.MapSingle<T>(reader);
-            }
+                using (var reader = command.ExecuteReader())
+                {
+                    result = _dataMapper.MapSingle<T>(reader);
+                }
 
-            return result;
+                return result;
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -159,12 +233,20 @@ namespace ServerManager.Rest.Database
             T result;
 
             await command.Connection.OpenAsync(cancellationToken);
-            using (var reader = await command.ExecuteReaderAsync(cancellationToken))
-            {
-                result = _dataMapper.MapSingle<T>(reader);
-            }
 
-            return result;
+            try
+            {
+                using (var reader = await command.ExecuteReaderAsync(cancellationToken))
+                {
+                    result = _dataMapper.MapSingle<T>(reader);
+                }
+
+                return result;
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
         /// <inheritdoc/>
@@ -176,12 +258,19 @@ namespace ServerManager.Rest.Database
 
             await command.Connection.OpenAsync();
 
-            using (var reader = await command.ExecuteReaderAsync())
+            try
             {
-                result = _dataMapper.MapSingle<T>(reader);
-            }
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    result = _dataMapper.MapSingle<T>(reader);
+                }
 
-            return result;
+                return result;
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
     }
 }

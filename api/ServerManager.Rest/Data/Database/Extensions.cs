@@ -70,7 +70,7 @@ namespace ServerManager.Rest.Database
                 else if (property.PropertyType.IsEnum)
                     value = reader.GetInt32(index);
                 else if (property.PropertyType == typeof(ServerPropertyList))
-                    value = reader.GetString(index);
+                    value = (ServerPropertyList)reader.GetString(index);
                 else
                     value = reader.GetValue(index);
 

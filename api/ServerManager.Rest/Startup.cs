@@ -60,6 +60,14 @@ namespace ServerManager.Rest
             services.AddTransient<IDiskOperator, DiskOperator>();
 
             var loggerConfig = LoggerConfiguration.Default;
+            
+            loggerConfig.MinFileLogLevel = NLog.LogLevel.FromString(Configuration.GetValue<string>("InternalLogger:ToFile"));
+            loggerConfig.MinConsoleLogLevel = NLog.LogLevel.FromString(Configuration.GetValue<string>("InternalLogger:ToConsole"));
+            loggerConfig.LogToFile = loggerConfig.MinFileLogLevel != NLog.LogLevel.Off;
+            loggerConfig.LogToConsole = loggerConfig.MinConsoleLogLevel != NLog.LogLevel.Off;
+            loggerConfig.LogPath = Configuration.GetValue<string>("InternalLogger:LogPath");
+            loggerConfig.ArchiveDirectory = Configuration.GetValue<string>("InternalLogger:ArchivePath");
+            loggerConfig.UseArchive = true;
 
             loggerFactory = new LoggerFactory(loggerConfig);
 

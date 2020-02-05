@@ -10,10 +10,6 @@ namespace ServerManager.Rest.Database
     public interface IConnection : IDisposable
     {
         /// <summary>
-        /// Determines if connection is open.
-        /// </summary>
-        bool IsOpen { get; }
-        /// <summary>
         /// Asynchronously opens a cancellable connection to the database.
         /// </summary>
         /// <param name="cancellationToken">token used to cancel the action.</param>

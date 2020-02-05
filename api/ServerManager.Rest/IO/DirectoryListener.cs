@@ -28,7 +28,7 @@ namespace ServerManager.Rest.IO
             {
                 // clear the cache since we will be raising events about a new directory.
                 ClearCache();
-                path = string.IsNullOrEmpty(value) ? value : value.EnsureTrailingSlash();
+                path = value;
             }
         }
 
@@ -270,7 +270,7 @@ namespace ServerManager.Rest.IO
         {
             try
             {
-                return _diskOperator.GetFiles(path).Select(s => s.Replace(path.EnsureTrailingSlash(), string.Empty));
+                return _diskOperator.GetFiles(path).Select(s => s.Replace(path.EnsureTrailingBackslash(), string.Empty).Replace(path.EnsureTrailingForwardSlash(), string.Empty));
             }
             catch (Exception e)
             {
@@ -284,7 +284,7 @@ namespace ServerManager.Rest.IO
         {
             try
             {
-                return _diskOperator.GetDirectories(path).Select(s => s.Replace(path.EnsureTrailingSlash(), string.Empty));
+                return _diskOperator.GetDirectories(path).Select(s => s.Replace(path.EnsureTrailingBackslash(), string.Empty).Replace(path.EnsureTrailingForwardSlash(), string.Empty));
             }
             catch (Exception e)
             {

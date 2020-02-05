@@ -39,6 +39,9 @@ namespace ServerManager.Rest.Management
 
         public void RefreshSettings()
         {
+            if (!_diskOperator.DirectoryExists(_serverPath))
+                _diskOperator.CreateDirectory(_serverPath);
+
             if (Server.Properties.RconEnabled && rconClient == null)
                 rconClient = new RconClient(_serverPath, Server.Properties.RconPort);
         }

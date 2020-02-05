@@ -56,7 +56,8 @@ namespace ServerManager.Rest.Database.Sqlite
             {
                 _logger.Log(LogLevel.Info, "Creating User table if not exists...");
 
-                using (var connection = _connectionFactory.BuildConnection(_connectionString))
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+                
                 using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateUserTable, CommandType.Text, connection))
                 {
                     await _commandExecutor.ExecuteNonQueryAsync(cmd);
@@ -64,7 +65,6 @@ namespace ServerManager.Rest.Database.Sqlite
 
                 _logger.Log(LogLevel.Info, "Creating ResetPasswordLinkTable table if not exists...");
 
-                using (var connection = _connectionFactory.BuildConnection(_connectionString))
                 using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateResetPasswordLinkTable, CommandType.Text, connection))
                 {
                     await _commandExecutor.ExecuteNonQueryAsync(cmd);
@@ -72,7 +72,6 @@ namespace ServerManager.Rest.Database.Sqlite
 
                 _logger.Log(LogLevel.Info, "Creating UserSession table if not exists...");
 
-                using (var connection = _connectionFactory.BuildConnection(_connectionString))
                 using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateUserSessionTable, CommandType.Text, connection))
                 {
                     await _commandExecutor.ExecuteNonQueryAsync(cmd);
@@ -80,10 +79,57 @@ namespace ServerManager.Rest.Database.Sqlite
 
                 _logger.Log(LogLevel.Info, "Creating UserInvitationLink table if not exists...");
 
-                using (var connection = _connectionFactory.BuildConnection(_connectionString))
                 using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateUserInvtitationLinkTable, CommandType.Text, connection))
                 {
                     await _commandExecutor.ExecuteNonQueryAsync(cmd);
+                }
+
+                _logger.Log(LogLevel.Info, "Creating DefaultProperties table if not exists...");
+
+                using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateDefaultPropertiesTable, CommandType.Text, connection))
+                {
+                    await _commandExecutor.ExecuteNonQueryAsync(cmd);
+                }
+
+                _logger.Log(LogLevel.Info, "Creating Template table if not exists...");
+
+                using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateTemplateTable, CommandType.Text, connection))
+                {
+                    await _commandExecutor.ExecuteNonQueryAsync(cmd);
+                }
+
+                _logger.Log(LogLevel.Info, "Creating Server table if not exists...");
+
+                using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateServerTable, CommandType.Text, connection))
+                {
+                    await _commandExecutor.ExecuteNonQueryAsync(cmd);
+                }
+
+                _logger.Log(LogLevel.Info, "Creating ServerProperties table if not exists...");
+
+                using (var cmd = _commandFactory.BuildCommand(SchemaCommands.CreateServerPropertiesTable, CommandType.Text, connection))
+                {
+                    await _commandExecutor.ExecuteNonQueryAsync(cmd);
+                }
+
+                _logger.Log(LogLevel.Info, "Checking DefaultProperties...");
+
+                int defaultPropertiesCount = 0;
+
+                using (var cmd = _commandFactory.BuildCommand("SELECT COUNT(*) FROM DefaultProperties", CommandType.Text, connection))
+                {
+                    defaultPropertiesCount = await _commandExecutor.ExecuteScalarAsync<int>(cmd);
+                }
+
+                if (defaultPropertiesCount == 0)
+                {
+                    _logger.Log(LogLevel.Info, "Populating DefaultProperties...");
+
+                    using (var cmd = _commandFactory.BuildCommand("INSERT INTO DefaultProperties ( Properties ) VALUES ( $Properties )", 
+                        CommandType.Text, connection, DbParameter.From("$Properties", SchemaCommands.DefaultPropertiesValue)))
+                    {
+                        await _commandExecutor.ExecuteNonQueryAsync(cmd);
+                    }
                 }
             }
             catch (Exception ex)

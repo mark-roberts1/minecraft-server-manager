@@ -6,11 +6,18 @@ namespace ServerManager.Rest
 {
     public static class ExtensionMethods
     {
-        public static string EnsureTrailingSlash(this string path)
+        public static string EnsureTrailingBackslash(this string path)
         {
-            if (path.EndsWith("\\")) return path;
+            if (string.IsNullOrEmpty(path) || path.EndsWith("\\")) return path;
 
             return $"{path}\\";
+        }
+
+        public static string EnsureTrailingForwardSlash(this string path)
+        {
+            if (string.IsNullOrEmpty(path) || path.EndsWith("/")) return path;
+
+            return $"{path}/";
         }
 
         public static string PrintFull(this Exception ex, int recursionLimit = 10)
