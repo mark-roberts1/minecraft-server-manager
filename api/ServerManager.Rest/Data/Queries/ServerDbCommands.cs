@@ -145,9 +145,11 @@ namespace ServerManager.Rest.Data
 
         public const string SelectTemplate = @"
             SELECT
+                TemplateId,
                 Name,
                 Description,
                 Version,
+                DownloadLink,
                 Properties
             FROM
                 Template

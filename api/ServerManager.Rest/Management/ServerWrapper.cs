@@ -42,6 +42,13 @@ namespace ServerManager.Rest.Management
             if (!_diskOperator.DirectoryExists(_serverPath))
                 _diskOperator.CreateDirectory(_serverPath);
 
+            if (!_diskOperator.FileExists(_propertiesPath))
+            {
+                using (_diskOperator.CreateFile(_propertiesPath)) { }
+
+                _diskOperator.WriteAllLines(_propertiesPath, Server.Properties.GetLines().ToArray());
+            }
+
             if (Server.Properties.RconEnabled && rconClient == null)
                 rconClient = new RconClient(_serverPath, Server.Properties.RconPort);
         }
@@ -94,7 +101,7 @@ namespace ServerManager.Rest.Management
             if (rconClient == null) throw new InvalidOperationException("RCON is not enabled on this server.");
 
             LoginIfNecessary();
-            
+
             try
             {
                 var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand("stop"), cancellationToken);
@@ -206,7 +213,7 @@ namespace ServerManager.Rest.Management
             }
 
             _diskOperator.WriteAllLines(_propertiesPath, properties.GetLines().ToArray());
-            
+
             Server.Properties = properties;
 
             if (wasRunning)
