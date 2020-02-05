@@ -89,8 +89,6 @@ namespace ServerManager.Rest.Management
             resp.DidStart = process.Start();
             resp.Log = process.StandardOutput.ReadToEnd();
 
-            process.WaitForExit();
-
             Server.Status = ServerStatus.Started;
 
             return resp;
@@ -147,7 +145,7 @@ namespace ServerManager.Rest.Management
                 return new ServerCommandResponse
                 {
                     Succeeded = true,
-                    Log = response.Text
+                    Log = response.ResponseText
                 };
             }
             catch (Exception ex)
@@ -171,7 +169,7 @@ namespace ServerManager.Rest.Management
 
             try
             {
-                var response = rconClient.ExecuteCommand(RconCommand.Login(Server.Properties.RconPassword));
+                var response = rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
                 authenticated = true;
             }
             catch (Exception ex)
