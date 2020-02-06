@@ -1,0 +1,55 @@
+@import '../Globals.scss';
+
+$icon-width: 45px;
+$icon-margin: 15px;
+
+header {
+    position: fixed;
+    height: $header-height;
+    width: $app-width;
+    background-color: $diamond;
+    z-index: 1000;
+
+    img {
+      margin-top: $icon-margin;
+      margin-left: 15px;
+      width: $icon-width;
+    }
+    
+    nav {
+      width: calc(100% - #{$icon-margin} - #{$icon-width});
+      display: block;
+      float: right;
+      height: $header-height;
+      
+      ul {
+        width: 100%;
+        max-width: 450px;
+        display: block;
+        float: right;
+        list-style-type:none;
+        margin: 0;
+        padding: calc(#{$header-height} / 3) 0;
+
+        li {
+          float: left;
+          width: 25%;
+          height: calc(#{$header-height} / 3);
+          background-color: rgba($color: #ccc, $alpha: 0.0);
+          text-align: center;
+          vertical-align: middle;
+
+          &:hover {
+            background-color: rgba($color: #ccc, $alpha: 0.4);
+          }
+
+          a {
+            text-decoration: none;
+            color: #fff;
+            font-style: bold;
+            letter-spacing: 2px;
+          }
+        }
+      }
+    }
+  }

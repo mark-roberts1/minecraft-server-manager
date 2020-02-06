@@ -1,15 +1,4 @@
-/* Color Theme Swatches in Hex */
-$lapis: #1439A3;
-$iron: #949494;
-$gold: #E8F057;
-$coal: #0E0E0E;
-$diamond: #629496;
-
-$app-width: 100%;
-$app-height: 100%;
-$header-height: 75px;
-$right-panel-width: 25%;
-
+@import './Globals.scss';
 
 .App {
   top: 0;
@@ -18,31 +7,6 @@ $right-panel-width: 25%;
   width: $app-width;
   height: $app-height;
   
-  header {
-    position: fixed;
-    height: $header-height;
-    width: $app-width;
-    background-color: $diamond;
-    z-index: 1000;
-    img {
-      margin-top: 15px;
-      margin-left: 15px;
-      width: 45px;
-    }
-    .header-buttons {
-      position:fixed;
-      width:$app-width;
-      height:$header-height;
-      
-      margin-left:75px;
-      .button{
-        position: sticky;
-        padding-bottom:100px;
-        
-      }
-    }
-  }
-
   .app-content {
     width: $app-width;
     height: calc(#{$app-height} - #{$header-height});
