@@ -1,9 +1,9 @@
 export class ServerProperty {
 	public constructor() {
-		this.Key = "";
-		this.Value = "";
+		this.key = "";
+		this.value = "";
 	}
 	
-	Key: string;
-	Value: string;
+	key: string;
+	value: string;
 }

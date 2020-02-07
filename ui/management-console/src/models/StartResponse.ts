@@ -1,9 +1,9 @@
 export class StartResponse {
 	public constructor() {
-		this.DidStart = false;
-		this.Log = "";
+		this.didStart = false;
+		this.log = "";
 	}
 
-	DidStart: boolean;
-	Log: string;
+	didStart: boolean;
+	log: string;
 }

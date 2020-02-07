@@ -1,7 +1,7 @@
 export class UpdatePasswordResponse {
 	public constructor() {
-		this.PasswordUpdated = false;
+		this.passwordUpdated = false;
 	}
 	
-	PasswordUpdated: boolean;
+	passwordUpdated: boolean;
 }

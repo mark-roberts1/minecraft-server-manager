@@ -1,7 +1,7 @@
 export class UpdateEmailResponse {
 	public constructor() {
-		this.EmailUpdated = false;
+		this.emailUpdated = false;
 	}
 	
-	EmailUpdated: boolean;
+	emailUpdated: boolean;
 }

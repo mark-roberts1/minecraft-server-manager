@@ -1,9 +1,9 @@
 export class UpdatePasswordRequest {
 	public constructor() {
-		this.OriginalPassword = "";
-		this.NewPassword = "";
+		this.originalPassword = "";
+		this.newPassword = "";
 	}
 
-	OriginalPassword: string;
-	NewPassword: string;
+	originalPassword: string;
+	newPassword: string;
 }

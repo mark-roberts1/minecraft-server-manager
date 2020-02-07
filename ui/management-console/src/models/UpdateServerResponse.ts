@@ -1,7 +1,7 @@
 export class UpdateServerResponse {
 	public constructor() {
-		this.Updated = false;
+		this.updated = false;
 	}
 	
-	Updated: boolean;
+	updated: boolean;
 }

@@ -1,7 +1,7 @@
 export class ServerCommandRequest {
 	public constructor() {
-		this.Command = "";
+		this.command = "";
 	}
 	
-	Command: string;
+	command: string;
 }

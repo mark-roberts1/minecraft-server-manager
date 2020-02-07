@@ -1,7 +1,7 @@
 export class InviteUserResponse {
 	public constructor() {
-		this.UserInvited = false;
+		this.userInvited = false;
 	}
 	
-	UserInvited: boolean;
+	userInvited: boolean;
 }

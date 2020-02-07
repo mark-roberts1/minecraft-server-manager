@@ -2,20 +2,20 @@ import { ServerProperty } from "./ServerProperty";
 
 export class ServerInfo {
 	public constructor() {
-		this.ServerId = 0;
-		this.Name = "";
-		this.Version = "";
-		this.Description = "";
-		this.Status = ServerStatus.Stopped;
-		this.Properties = [];
+		this.serverId = 0;
+		this.name = "";
+		this.version = "";
+		this.description = "";
+		this.status = ServerStatus.Stopped;
+		this.properties = [];
 	}
 
-	ServerId: number;
-	Name: string;
-	Version: string;
-	Description: string;
-	Status: ServerStatus;
-	Properties: ServerProperty[];
+	serverId: number;
+	name: string;
+	version: string;
+	description: string;
+	status: ServerStatus;
+	properties: ServerProperty[];
 }
 
 export enum ServerStatus

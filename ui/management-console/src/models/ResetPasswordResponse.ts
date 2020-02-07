@@ -1,7 +1,7 @@
 export class ResetPasswordResponse {
 	public constructor() {
-		this.PasswordReset = false;
+		this.passwordReset = false;
 	}
 	
-	PasswordReset: boolean;
+	passwordReset: boolean;
 }

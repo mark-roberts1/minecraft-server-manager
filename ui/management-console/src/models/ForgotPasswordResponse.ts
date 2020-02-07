@@ -1,7 +1,7 @@
 export class ForgotPasswordResponse {
 	public constructor() {
-		this.LinkSent = false;
+		this.linkSent = false;
 	}
 	
-	LinkSent: boolean;
+	linkSent: boolean;
 }

@@ -1,7 +1,7 @@
 export class LinkValidationResponse {
 	public constructor() {
-		this.IsValid = false;
+		this.isValid = false;
 	}
 	
-	IsValid: boolean;
+	isValid: boolean;
 }
