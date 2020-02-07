@@ -1,7 +1,7 @@
 export class TokenResponse {
 	public constructor() {
-		this.Token = "";
+		this.token = "";
 	}
 
-	Token: string;
+	token: string;
 }
