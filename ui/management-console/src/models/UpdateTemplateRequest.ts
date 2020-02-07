@@ -1,15 +1,15 @@
 export class UpdateTemplateRequest {
 	public constructor() {
-		this.TemplateId = 0;
-		this.Name = "";
-		this.Description = "";
-		this.Version = "";
-		this.DownloadLink = "";
+		this.templateId = 0;
+		this.name = "";
+		this.description = "";
+		this.version = "";
+		this.downloadLink = "";
 	}
 
-	TemplateId: number;
-	Name: string;
-	Description: string;
-	Version: string;
-	DownloadLink: string;
+	templateId: number;
+	name: string;
+	description: string;
+	version: string;
+	downloadLink: string;
 }

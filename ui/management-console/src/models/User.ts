@@ -1,19 +1,19 @@
 export class User {
 	public constructor() {
-		this.UserId = 0;
-		this.Username = "";
-		this.MinecraftUsername = "";
-		this.Email = "";
-		this.UserRole = UserRole.Normal;
-		this.IsLocked = false;
+		this.userId = 0;
+		this.username = "";
+		this.minecraftUsername = "";
+		this.email = "";
+		this.userRole = UserRole.Normal;
+		this.isLocked = false;
 	}
 
-	UserId: number;
-	Username: string;
-	MinecraftUsername: string;
-	Email: string;
-	UserRole: UserRole;
-	IsLocked: boolean;
+	userId: number;
+	username: string;
+	minecraftUsername: string;
+	email: string;
+	userRole: UserRole;
+	isLocked: boolean;
 
 }
 

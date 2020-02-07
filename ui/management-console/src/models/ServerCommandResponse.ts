@@ -1,9 +1,9 @@
 export class ServerCommandResponse {
 	public constructor() {
-		this.Succeeded = false;
-		this.Log = "";
+		this.succeeded = false;
+		this.log = "";
 	}
 
-	Succeeded: boolean;
-	Log: string;
+	succeeded: boolean;
+	log: string;
 }

@@ -1,9 +1,9 @@
 export class ResetPasswordRequest {
 	public constructor() {
-		this.Link = "";
-		this.NewPassword = "";
+		this.link = "";
+		this.newPassword = "";
 	}
 	
-	Link: string;
-	NewPassword: string;
+	link: string;
+	newPassword: string;
 }

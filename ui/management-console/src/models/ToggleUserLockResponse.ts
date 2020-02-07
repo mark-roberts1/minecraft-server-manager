@@ -1,7 +1,7 @@
 export class ToggleUserLockResponse {
 	public constructor() {
-		this.IsUserLocked = false;
+		this.isUserLocked = false;
 	}
 	
-	IsUserLocked: boolean;
+	isUserLocked: boolean;
 }

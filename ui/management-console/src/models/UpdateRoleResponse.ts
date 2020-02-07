@@ -1,7 +1,7 @@
 export class UpdateRoleResponse {
 	public constructor() {
-		this.RoleUpdated = false;
+		this.roleUpdated = false;
 	}
 
-	RoleUpdated: boolean;
+	roleUpdated: boolean;
 }

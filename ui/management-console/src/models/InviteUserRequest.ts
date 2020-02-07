@@ -1,7 +1,7 @@
 export class InviteUserRequest {
 	public constructor() {
-		this.EmailAddress = "";
+		this.emailAddress = "";
 	}
 	
-	EmailAddress: string;
+	emailAddress: string;
 }

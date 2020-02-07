@@ -2,14 +2,14 @@ import { ServerProperty } from "./ServerProperty";
 
 export class UpdateServerRequest {
 	public constructor() {
-		this.NewName = "";
-		this.Version = "";
-		this.Description = "";
-		this.NewProperties = [];
+		this.newName = "";
+		this.version = "";
+		this.description = "";
+		this.newProperties = [];
 	}
 
-	NewName: string;
-	Version: string;
-	Description: string;
-	NewProperties: ServerProperty[];
+	newName: string;
+	version: string;
+	description: string;
+	newProperties: ServerProperty[];
 }

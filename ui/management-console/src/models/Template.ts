@@ -2,18 +2,18 @@ import { ServerProperty } from "./ServerProperty";
 
 export class Template {
 	public constructor() {
-		this.TemplateId = 0;
-		this.Name = "";
-		this.Description = "";
-		this.Version = "";
-		this.DownloadLink = "";
-		this.Properties = [];
+		this.templateId = 0;
+		this.name = "";
+		this.description = "";
+		this.version = "";
+		this.downloadLink = "";
+		this.properties = [];
 	}
 
-	TemplateId: number;
-	Name: string;
-	Description: string;
-	Version: string;
-	DownloadLink: string;
-	Properties: ServerProperty[];
+	templateId: number;
+	name: string;
+	description: string;
+	version: string;
+	downloadLink: string;
+	properties: ServerProperty[];
 }
