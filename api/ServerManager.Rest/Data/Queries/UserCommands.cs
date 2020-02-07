@@ -155,5 +155,10 @@ namespace ServerManager.Rest.Data
             WHERE
                 UserId = $UserId
         ";
+        public const string LogOut = @"
+        DELETE 
+            FROM UserSession 
+        WHERE 
+            UserId = $UserId";
     }
 }

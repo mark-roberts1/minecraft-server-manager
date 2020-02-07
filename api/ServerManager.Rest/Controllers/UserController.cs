@@ -129,5 +129,6 @@ namespace ServerManager.Rest.Controllers
 
             return await UserData.ToggleUserLockAsync(userId, cancellationToken);
         }
+        
     }
 }
