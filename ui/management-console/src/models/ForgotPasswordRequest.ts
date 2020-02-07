@@ -1,7 +1,7 @@
 export class ForgotPasswordRequest {
 	public constructor() {
-		this.Username = "";
+		this.username = "";
 	}
 	
-	Username: string;
+	username: string;
 }

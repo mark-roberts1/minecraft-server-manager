@@ -1,9 +1,9 @@
 export class CreateServerResponse {
 	public constructor() {
-		this.ServerId = 0;
-		this.Created = false;
+		this.serverId = 0;
+		this.created = false;
 	}
 
-	ServerId: number;
-	Created: boolean;
+	serverId: number;
+	created: boolean;
 }

@@ -1,13 +1,13 @@
 export class CreateUserRequest {
 	public constructor() {
-		this.Username = "";
-		this.Email = "";
-		this.Password = "";
-		this.InvitationLink = "";
+		this.username = "";
+		this.email = "";
+		this.password = "";
+		this.invitationLink = "";
 	}
 
-	Username: string;
-	Email: string;
-	Password: string;
-	InvitationLink: string;
+	username: string;
+	email: string;
+	password: string;
+	invitationLink: string;
 }

@@ -1,9 +1,9 @@
 export class DeleteUserResponse {
 	public constructor() {
-		this.UserId = 0;
-		this.UserDeleted = false;
+		this.userId = 0;
+		this.userDeleted = false;
 	}
 	
-	UserId: number;
-	UserDeleted: boolean;
+	userId: number;
+	userDeleted: boolean;
 }

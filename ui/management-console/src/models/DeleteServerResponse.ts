@@ -1,7 +1,7 @@
 export class DeleteServerResponse {
 	public constructor() {
-		this.ServerDeleted = false;
+		this.serverDeleted = false;
 	}
 	
-	ServerDeleted: boolean;
+	serverDeleted: boolean;
 }

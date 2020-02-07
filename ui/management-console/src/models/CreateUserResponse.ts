@@ -1,7 +1,7 @@
 export class CreateUserResponse {
 	public constructor() {
-		this.UserCreated = false;
+		this.userCreated = false;
 	}
 
-	UserCreated: boolean;
+	userCreated: boolean;
 }

@@ -1,9 +1,9 @@
 export class AddTemplateResponse {
 	public constructor() {
-		this.TemplateAdded = false;
-		this.TemplateId = 0;
+		this.templateAdded = false;
+		this.templateId = 0;
 	}
 
-	TemplateAdded: boolean;
-	TemplateId: number;
+	templateAdded: boolean;
+	templateId: number;
 }
