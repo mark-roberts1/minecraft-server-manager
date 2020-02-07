@@ -1,13 +1,13 @@
 export class AddTemplateRequest {
 	public constructor() {
-		this.Name = "";
-		this.Description = "";
-		this.Version = "";
-		this.DownloadLink = "";
+		this.name = "";
+		this.description = "";
+		this.version = "";
+		this.downloadLink = "";
 	}
 
-	Name: string;
-	Description: string;
-	Version: string;
-	DownloadLink: string;
+	name: string;
+	description: string;
+	version: string;
+	downloadLink: string;
 }

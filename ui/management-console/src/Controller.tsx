@@ -44,14 +44,17 @@ export class Controller {
     private sessionToken: string | null;
     
     private authConfig: AxiosRequestConfig = {
-        headers: [
-            { "SessionToken": this.sessionToken },
-            { "Content-Type": "application/json" }
-        ]
+        
+        headers: { 
+            "SessionToken": this.sessionToken ,
+            "Content-Type": "application/json"
+        }
     };
 
     private unauthConfig: AxiosRequestConfig = {
-        headers: [{ "Content-Type": "application/json" }]
+        headers: { 
+            "Content-Type": "application/json"
+        }
     };
 
     public async getCurrentUser() : Promise<User> {
@@ -149,7 +152,7 @@ export class Controller {
     public async login(request: LoginRequest) : Promise<boolean> {
         let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/token`, request, this.unauthConfig)).data;
 
-        this.sessionToken = response.Token;
+        console.log(response);
 
         return true;
     }

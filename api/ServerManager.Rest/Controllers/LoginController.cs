@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServerManager.Rest.Data;
 using ServerManager.Rest.Database;
 using ServerManager.Rest.Dto;
+using ServerManager.Rest.Filters;
 using ServerManager.Rest.Utility;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,8 @@ using System.Threading.Tasks;
 namespace ServerManager.Rest.Controllers
 {
     [Route("api/auth")]
+    [EnableCors("AllowAny")]
+    [ApiExceptionFilter]
     [ApiController]
     public class LoginController : ApiController
     {

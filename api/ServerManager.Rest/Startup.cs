@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +28,29 @@ namespace ServerManager.Rest
             Configuration = configuration;
         }
 
+        private readonly string CORS_POLICY = "AllowAny";
+
         public IConfiguration Configuration { get; }
-        private LoggerFactory loggerFactory;
+        public static LoggerFactory LoggerFactory { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvcCore(options => options.EnableEndpointRouting = false);
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy(CORS_POLICY, builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    //builder.WithOrigins("https://api.marksgamedomain.net", "https://marksgamedomain.net", "https://www.marksgamedomain.net", "https://localhost:3000", "https://localhost:44345");
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    //builder.AllowCredentials();
+                });
+            });
+
+            services.AddMvc(options => options.EnableEndpointRouting = false);
 
             services.AddSwaggerGen(c =>
             {
@@ -69,11 +85,11 @@ namespace ServerManager.Rest
             loggerConfig.ArchiveDirectory = Configuration.GetValue<string>("InternalLogger:ArchivePath");
             loggerConfig.UseArchive = true;
 
-            loggerFactory = new LoggerFactory(loggerConfig);
+            LoggerFactory = new LoggerFactory(loggerConfig);
 
             services.AddSingleton<ILoggerFactory, LoggerFactory>((provider) =>
             {
-                return loggerFactory;
+                return LoggerFactory;
             });
         }
 
@@ -88,6 +104,8 @@ namespace ServerManager.Rest
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CORS_POLICY);
 
             app.UseAuthorization();
 
@@ -106,7 +124,7 @@ namespace ServerManager.Rest
 
             app.UseMvc();
 
-            var dbStartup = new DatabaseStartupRoutine(Configuration, loggerFactory);
+            var dbStartup = new DatabaseStartupRoutine(Configuration, LoggerFactory);
 
             var startupTask = dbStartup.Start();
             startupTask.Wait();

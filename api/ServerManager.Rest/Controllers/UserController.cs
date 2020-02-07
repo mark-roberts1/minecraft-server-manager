@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServerManager.Rest.Data;
 using ServerManager.Rest.Dto;
+using ServerManager.Rest.Filters;
 using ServerManager.Rest.Utility;
 
 namespace ServerManager.Rest.Controllers
 {
     [Route("api/user")]
+    [EnableCors("AllowAny")]
+    [ApiExceptionFilter]
     [ApiController]
     public class UserController : ApiController
     {
