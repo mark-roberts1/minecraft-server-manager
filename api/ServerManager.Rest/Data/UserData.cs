@@ -210,6 +210,22 @@ namespace ServerManager.Rest.Data
 
             return result;
         }
+        public async Task<LogOutResponse> LogOutAsync(string token, CancellationToken cancellationToken)
+        {
+            var user = await GetUserBySessionTokenAsync(token, cancellationToken);
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+                using var command = _commandFactory.BuildCommand(UserCommands.LogOut, 
+                    CommandType.Text, connection, 
+                    DbParameter.From("$UserId", user.UserId));
+                    return await _commandExecutor.ExecuteSingleAsync<LogOutResponse>(command, cancellationToken);
+            }
+            catch (Exception ex) {
+                _logger.Log(LogLevel.Error, ex);
+                throw;
+            }
+        }
 
         private async Task<UserLogin> GetUserCredentialsAsync(string username, CancellationToken cancellationToken)
         {

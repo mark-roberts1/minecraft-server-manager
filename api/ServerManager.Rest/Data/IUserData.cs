@@ -11,6 +11,7 @@ namespace ServerManager.Rest.Data
     public interface IUserData
     {
         Task<PasswordVerificationResult> LoginAsync(LoginRequest loginRequest, CancellationToken cancellationToken);
+        Task<LogOutResponse> LogOutAsync(string token, CancellationToken cancellationToken);
         Task StoreUserSessionTokenAsync(string username, string token, CancellationToken cancellationToken);
         Task<User> GetUserAsync(string username, CancellationToken cancellationToken);
         Task<User> GetUserAsync(int userId, CancellationToken cancellationToken);
@@ -27,6 +28,6 @@ namespace ServerManager.Rest.Data
         Task<UpdateRoleResponse> UpdateUserRole(int userId, UserRole userRole, CancellationToken cancellationToken);
         Task<ToggleUserLockResponse> ToggleUserLockAsync(int userId, CancellationToken cancellationToken);
         Task<ResetPasswordResponse> ResetUserPasswordAsync(int userId, string password, CancellationToken cancellationToken);
-
+        
     }
 }

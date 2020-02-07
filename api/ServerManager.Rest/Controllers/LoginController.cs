@@ -47,7 +47,16 @@ namespace ServerManager.Rest.Controllers
                 Token = token
             };
         }
-
+        [HttpPost("endsession")]
+        public async Task<TokenResponse> LogOutAsync(CancellationToken cancellationToken)
+        {
+            ThrowIfUnauthenticated();
+            await UserData.LogOutAsync(SessionToken, cancellationToken);
+            return new TokenResponse
+            {
+                Token = null
+            };
+        }
         [HttpPost("forgotpassword")]
         public async Task<ForgotPasswordResponse> SendPasswordResetEmailAsync(ForgotPasswordRequest forgotPasswordRequest, CancellationToken cancellationToken)
         {
