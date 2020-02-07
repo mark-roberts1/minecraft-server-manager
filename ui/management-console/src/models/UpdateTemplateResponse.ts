@@ -1,7 +1,7 @@
 export class UpdateTemplateResponse {
 	public constructor() {
-		this.Updated = false;
+		this.updated = false;
 	}
 	
-	Updated: boolean;
+	updated: boolean;
 }

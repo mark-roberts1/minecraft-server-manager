@@ -1,7 +1,7 @@
 export class UpdateEmailRequest {
 	public constructor() {
-		this.NewEmail = "";
+		this.newEmail = "";
 	}
 
-	NewEmail: string;
+	newEmail: string;
 }
