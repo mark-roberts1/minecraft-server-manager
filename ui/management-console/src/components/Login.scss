@@ -1,0 +1,112 @@
+@import '../Globals.scss';
+
+
+
+
+
+
+
+
+.app-content {
+    .login {
+        display: flex;
+        height: 100%;
+
+        .login-form {
+            margin: auto;
+            width: 100%;
+            max-width: 600px;
+            height: 100%;
+            max-height: 600px;
+            text-align: center;
+            
+            .input-wrapper {
+                width: 60%;
+                margin: 0 auto;
+
+                .field-wrapper {
+                    position: relative;
+                    padding: 15px 0 0;
+                    margin: 20px 0;
+                    width: 100%;
+
+                    .field {
+                        font-family: inherit;
+                        width: 100%;
+                        border: 0;
+                        border-bottom: 2px solid $coal;
+                        outline: 0;
+                        font-size: 1.3rem;
+                        color: $coal;
+                        padding: 7px 0;
+                        background: transparent;
+                        transition: border-color 0.2s;
+                      
+                        &::placeholder {
+                            color: transparent;
+                        }
+                      
+                        &:placeholder-shown ~ .field-label {
+                            font-size: 1.3rem;
+                            cursor: text;
+                            top: 20px;
+                        }
+                    }
+
+                    .field-label {
+                        position: absolute;
+                        top: 0;
+                        display: block;
+                        transition: 0.2s;
+                        font-size: 1rem;
+                        color: $coal;
+                    }
+                    
+                    .field:focus {
+                        ~ .field-label {
+                            position: absolute;
+                            top: 0;
+                            display: block;
+                            transition: 0.2s;
+                            font-size: 1rem;
+                            color: $lapis;
+                            font-weight:700;    
+                        }
+
+                        padding-bottom: 6px;  
+                        font-weight: 700;
+                        border-width: 3px;
+                        border-image: linear-gradient(to right, $lapis, $diamond);
+                        border-image-slice: 1;
+                    }
+                    
+                    .field{
+                        &:required,&:invalid { box-shadow:none; }
+                    }
+                }
+            }
+
+            .login-btn {
+                background-color: $lapis;
+                border: none;
+                width: 60%;
+                height: 50px;
+                color: #fff;
+                font-family: 'Fira Code', monospace;
+                font-size: 1.5rem;
+                margin: 20px 0;
+                cursor: pointer;
+            }
+
+            .link {
+                text-decoration: none;
+                color: $lapis;
+                margin: 0 5px;
+
+                &:hover {
+                    background-color: rgba($color: $coal, $alpha: 0.4);
+                }
+            }
+        }
+    }
+}

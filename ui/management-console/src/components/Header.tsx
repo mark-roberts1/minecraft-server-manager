@@ -6,7 +6,9 @@ import { Link } from 'react-router-dom';
 const Header : React.FC = () => {
     return (
         <header>
-            <img src={icon} alt=""/>
+            <Link to="/home">
+                <img src={icon} alt=""/>
+            </Link>
             <nav>
                 <ul>
                     <li>

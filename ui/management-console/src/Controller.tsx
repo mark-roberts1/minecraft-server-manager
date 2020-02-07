@@ -152,8 +152,7 @@ export class Controller {
     public async login(request: LoginRequest) : Promise<boolean> {
         let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/token`, request, this.unauthConfig)).data;
 
-        console.log(response);
-
+        this.sessionToken = response.token;
         return true;
     }
 

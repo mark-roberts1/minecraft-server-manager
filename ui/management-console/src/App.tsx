@@ -8,22 +8,9 @@ import UserList from './components/UserList';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Controller } from './Controller';
 import { LoginRequest } from './models/LoginRequest';
+import Home from './components/Home';
 
 const App: React.FC = () => {
-  useEffect(() => {
-    async function executeAsync(controller: Controller) {
-      let request: LoginRequest = {
-        Username: "startupAdmin",
-        Password: "QWEasdqwe123!"
-      };
-
-      console.log(await controller.login(request));
-    }
-
-    let controller = new Controller("https://api.marksgamedomain.net", null);
-
-    executeAsync(controller);
-  }, []);
   
   return (
     <Router>
@@ -31,6 +18,9 @@ const App: React.FC = () => {
       <Header></Header>
       <div className="app-content">
         <Switch>
+          <Route path="/home">
+            <Home/>
+          </Route>
           <Route path="/login">
             <Login/>
           </Route>

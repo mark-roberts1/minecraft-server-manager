@@ -78,5 +78,11 @@ namespace ServerManager.Rest.Controllers
 
             return response;
         }
+
+        [HttpGet("checktoken")]
+        public async Task<bool> CheckTokenAsync()
+        {
+            return await base.IsAuthenticatedAsync();
+        }
     }
 }

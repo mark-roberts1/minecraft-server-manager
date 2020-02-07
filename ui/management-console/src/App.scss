@@ -11,16 +11,6 @@
     width: $app-width;
     height: calc(#{$app-height} - #{$header-height});
     margin-top: $header-height;
-    background-color: $coal;
     
-  }
-  .right-panel {
-    width: $right-panel-width;
-    height: $app-height;
-    align-self: right;
-    margin-top: $header-height;
-    margin-left: calc(#{$app-width} - #{$right-panel-width});
-    background-color: $iron;
-    opacity: 50%;
   }
 }

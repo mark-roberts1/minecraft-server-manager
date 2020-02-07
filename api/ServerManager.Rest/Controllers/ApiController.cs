@@ -26,6 +26,11 @@ namespace ServerManager.Rest.Controllers
             }
         }
 
+        protected async Task<bool> IsAuthenticatedAsync()
+        {
+            return (await GetAuthenticatedUser()) != null;
+        }
+
         protected bool IsLocked
         {
             get
