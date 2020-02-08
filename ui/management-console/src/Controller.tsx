@@ -156,7 +156,7 @@ export class Controller {
         return true;
     }
     public async logout() : Promise<boolean> {
-        let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/endsession`, this.unauthConfig)).data;
+        let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/endsession`, this.authConfig)).data;
 
         this.sessionToken = response.token;
         return true;
