@@ -115,11 +115,19 @@ namespace ServerManager.Rest.Controllers
         }
 
         [HttpPost("{serverId}/executecommand")]
-        public async Task<ServerCommandResponse> ExecuteCommand([FromRoute] int serverId, [FromBody] ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
+        public async Task<ServerCommandResponse> ExecuteCommandAsync([FromRoute] int serverId, [FromBody] ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken)
         {
             ThrowIfNotAdmin();
 
             return await _serverData.ExecuteCommandAsync(serverId, serverCommandRequest, cancellationToken);
+        }
+
+        [HttpGet("defaultproperties")]
+        public async Task<ServerPropertyList> GetDefaultPropertiesAsync(CancellationToken cancellationToken)
+        {
+            ThrowIfNotAdmin();
+
+            return await _serverData.GetDefaultPropertiesAsync(cancellationToken);
         }
     }
 }

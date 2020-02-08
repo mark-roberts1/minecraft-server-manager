@@ -16,7 +16,7 @@ namespace ServerManager.Rest.Dto
         {
             if (string.IsNullOrWhiteSpace(fileLine)) throw new InvalidCastException("Invalid server property");
             if (fileLine.Trim().StartsWith("#")) throw new InvalidCastException("ServerProperty commented out");
-            var vals = fileLine.Split('=');
+            var vals = fileLine.Replace("\r", "").Split('=');
 
             var prop = new ServerProperty();
 

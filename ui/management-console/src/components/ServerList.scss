@@ -1,0 +1,186 @@
+@import '../Globals.scss';
+
+$server-actions-height: 150px;
+$list-height: calc(100% - #{$server-actions-height});
+$list-gutter-total: 30px;
+
+.server-list {
+    display: flex;
+    height: 100%;
+
+    .list {
+        text-align: center;
+        margin: auto;
+        height: calc(100% - #{$list-gutter-total});
+        width: calc(100% - #{$list-gutter-total});
+        max-width: 1500px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+        .action-container {
+            height: 74px;
+            padding: 22px;
+
+            button, a {
+                float:right;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                margin: 0 10px;
+                background-color: $emerald;
+                border: none;
+                width: 100px;
+                height: 30px;
+                color: #fff;
+                font-family: 'Fira Code', monospace;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.add-server-backdrop {
+    position: absolute;
+    background-color: rgba($coal, 0.5);
+    top: 75px;
+    right: 0;
+    height: calc(100% - #{$header-height});
+    width: 100%;
+
+    .add-server-modal {
+        margin: 3% auto 0 auto;
+        width: 100%;
+        max-width: 1000px;
+        height: 100%;
+        max-height: 750px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        
+        .modal-header {
+            padding: 20px;
+            height: 32px;
+            .header-item {
+                float: left;
+            }
+    
+            .close {
+                text-align: center;
+                vertical-align: middle;
+                width: 40px;
+                font-size: 1.5rem;
+                font-weight: bolder;
+                cursor: pointer;
+            }
+            
+            h2 {
+                margin: 0;
+                width: calc(100% - 40px);
+            }
+        }
+
+        .modal-body {
+            width: calc(100% - 40px);
+            height: calc(100% - 142px);
+            margin: 0 auto;
+            overflow: auto;
+
+            .field-wrapper {
+                position: relative;
+                padding: 15px 0 0;
+                margin: 20px 0px;
+                width: 50%;
+                float: left;
+
+                &.full {
+                    width: 100%;
+                }
+
+                &.small {
+                    width: 30%;
+                }
+
+                .field {
+                    font-family: inherit;
+                    width: 98%;
+                    border: 0;
+                    border-bottom: 2px solid $coal;
+                    outline: 0;
+                    font-size: 1.3rem;
+                    color: $coal;
+                    padding: 7px 0;
+                    background: transparent;
+                    transition: border-color 0.2s;
+                    &::placeholder {
+                        color: transparent;
+                    }
+                  
+                    &:placeholder-shown ~ .field-label {
+                        font-size: 1.3rem;
+                        cursor: text;
+                        top: 20px;
+                    }
+                }
+
+                .field-label {
+                    position: absolute;
+                    top: 0;
+                    display: block;
+                    transition: 0.2s;
+                    font-size: 1rem;
+                    color: $coal;
+                }
+                
+                .field:focus {
+                    ~ .field-label {
+                        position: absolute;
+                        top: 0;
+                        display: block;
+                        transition: 0.2s;
+                        font-size: 1rem;
+                        color: $lapis;
+                        font-weight:700;    
+                    }
+
+                    padding-bottom: 6px;  
+                    font-weight: 700;
+                    border-width: 3px;
+                    border-image: linear-gradient(to right, $lapis, $diamond);
+                    border-image-slice: 1;
+                }
+                
+                .field{
+                    &:required,&:invalid { box-shadow:none; }
+                }
+            }
+
+            ul {
+                display: block;
+                width: 100%;
+                float: left;
+                padding: 0;
+
+                li {
+                    display: block;
+                    list-style: none;
+                    width: 100%;
+
+                    label {
+                        float: left;
+                        width: 30%;
+                        height: 60px;
+                        padding: 15px 0 0;
+                        margin: 20px 0px;
+                    }
+                }
+            }
+        }
+        .modal-footer {
+            display: flex;
+
+            .modal-submit {
+                margin: auto;
+            }
+        }
+    }
+}

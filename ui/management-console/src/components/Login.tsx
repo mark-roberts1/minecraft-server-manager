@@ -2,9 +2,15 @@ import React, { useState } from 'react';
 import './Login.scss';
 import { LoginRequest } from '../models/LoginRequest';
 import { Link } from 'react-router-dom';
+import api from '../Controller'
 
 const Login: React.FC = () => {
     const [login, setLogin] = useState(new LoginRequest());
+    
+    const loginApi = async (e: any) => {
+        let loggedIn = await api.login(login);
+    }
+
     return (
         <div className="login">
             <div className="login-form">
@@ -21,10 +27,10 @@ const Login: React.FC = () => {
                         <label htmlFor="password" className="field-label">Password</label>
                     </div>
                 </div>
-                <button itemType="submit" className="login-btn">Login</button>
+                <button itemType="submit" className="login-btn" onClick={e => loginApi(e)}>Login</button>
                 <br/>
                 <Link className="link" to="/forgotpassword">Forgot Password</Link>|
-                <Link className="link" to="/requestaccount">Request Access</Link>
+                <Link className="link" to="/forgotusername">Forgot Username</Link>
             </div>
         </div>
     )
