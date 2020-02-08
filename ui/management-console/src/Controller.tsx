@@ -155,7 +155,12 @@ export class Controller {
         this.sessionToken = response.token;
         return true;
     }
+    public async logout() : Promise<boolean> {
+        let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/endsession`, this.unauthConfig)).data;
 
+        this.sessionToken = response.token;
+        return true;
+    }
     public async forgotPassword(request: ForgotPasswordRequest) : Promise<ForgotPasswordResponse> {
         return (await axios.post<ForgotPasswordResponse>(`${this.baseUrl}/api/auth/forgotpassword`, request, this.unauthConfig)).data;
     }
