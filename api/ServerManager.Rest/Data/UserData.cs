@@ -21,9 +21,9 @@ namespace ServerManager.Rest.Data
         private readonly string _connectionString;
         private readonly IPasswordHasher<User> _passwordHasher;
 
-        public UserData(IDbCommandFactory commandFactory, 
-            IDbConnectionFactory connectionFactory, 
-            ICommandExecutor commandExecutor, 
+        public UserData(IDbCommandFactory commandFactory,
+            IDbConnectionFactory connectionFactory,
+            ICommandExecutor commandExecutor,
             ILoggerFactory loggerFactory,
             IConfiguration configuration)
         {
@@ -210,20 +210,25 @@ namespace ServerManager.Rest.Data
 
             return result;
         }
-        public async Task<LogOutResponse> LogOutAsync(string token, CancellationToken cancellationToken)
+        public async Task<bool> LogOutAsync(string token, CancellationToken cancellationToken)
         {
             var user = await GetUserBySessionTokenAsync(token, cancellationToken);
+            
             try
             {
                 using var connection = _connectionFactory.BuildConnection(_connectionString);
-                using var command = _commandFactory.BuildCommand(UserCommands.LogOut, 
-                    CommandType.Text, connection, 
+                using var command = _commandFactory.BuildCommand(UserCommands.LogOut,
+                    CommandType.Text, connection,
                     DbParameter.From("$UserId", user.UserId));
-                    return await _commandExecutor.ExecuteSingleAsync<LogOutResponse>(command, cancellationToken);
+                
+                var result = await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
+
+                return true;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.Log(LogLevel.Error, ex);
-                throw;
+                return false;
             }
         }
 
@@ -337,7 +342,7 @@ namespace ServerManager.Rest.Data
             var response = new UpdatePasswordResponse();
 
             var user = await GetUserAsync(userId, cancellationToken);
-            
+
             var result = await LoginAsync(new LoginRequest
             {
                 Password = request.OriginalPassword,
@@ -406,9 +411,9 @@ namespace ServerManager.Rest.Data
             try
             {
                 using var connection = _connectionFactory.BuildConnection(_connectionString);
-                using var command = _commandFactory.BuildCommand(UserCommands.InsertUserSessionToken, 
-                    CommandType.Text, 
-                    connection, 
+                using var command = _commandFactory.BuildCommand(UserCommands.InsertUserSessionToken,
+                    CommandType.Text,
+                    connection,
                     DbParameter.From("$UserId", user.UserId),
                     DbParameter.From("$Token", token));
 

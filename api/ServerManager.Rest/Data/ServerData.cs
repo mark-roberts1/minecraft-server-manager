@@ -342,5 +342,18 @@ namespace ServerManager.Rest.Data
 
             return response;
         }
+
+        public async Task<ServerPropertyList> GetDefaultPropertiesAsync(CancellationToken cancellationToken)
+        {
+            using var connection = _connectionFactory.BuildConnection(_connectionString);
+            using var command = _commandFactory.BuildCommand(ServerDbCommands.SelectDefaultProperties, CommandType.Text, connection);
+
+            return (await _commandExecutor.ExecuteSingleAsync<DefaultProperties>(command, cancellationToken)).Properties;
+        }
+
+        private class DefaultProperties
+        {
+            public ServerPropertyList Properties { get; set; }
+        }
     }
 }

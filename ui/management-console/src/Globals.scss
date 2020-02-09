@@ -3,8 +3,21 @@ $iron: #949494;
 $gold: #E8F057;
 $coal: #0E0E0E;
 $diamond: #629496;
+$emerald: #008f64;
 
 $app-width: 100%;
 $app-height: 100%;
 $header-height: 75px;
 $right-panel-width: 25%;
+
+.submit-btn {
+    background-color: $lapis;
+    border: none;
+    width: 60%;
+    height: 50px;
+    color: #fff;
+    font-family: 'Fira Code', monospace;
+    font-size: 1.5rem;
+    margin: 20px 0;
+    cursor: pointer;
+}

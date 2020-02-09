@@ -33,20 +33,19 @@ import { ForgotPasswordRequest } from './models/ForgotPasswordRequest';
 import { ForgotPasswordResponse } from './models/ForgotPasswordResponse';
 import { ResetPasswordRequest } from './models/ResetPasswordRequest';
 import { ResetPasswordResponse } from './models/ResetPasswordResponse';
+import { ServerProperty } from './models/ServerProperty';
 
 export class Controller {
-    public constructor(baseUrl: string, sessionToken: string | null) {
+    public constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
-        this.sessionToken = sessionToken;
     }
 
     private baseUrl: string;
-    private sessionToken: string | null;
     
     private authConfig: AxiosRequestConfig = {
         
         headers: { 
-            "SessionToken": this.sessionToken ,
+            "SessionToken": localStorage.getItem("sessionToken")?.toString(),
             "Content-Type": "application/json"
         }
     };
@@ -151,21 +150,15 @@ export class Controller {
 
     public async login(request: LoginRequest) : Promise<boolean> {
         let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/token`, request, this.unauthConfig)).data;
+        localStorage.setItem("sessionToken", response.token);
 
-        this.sessionToken = response.token;
         return true;
     }
-
-<<<<<<< Updated upstream
-=======
     public async logout() : Promise<boolean> {
         let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/endsession`, null, this.authConfig)).data;
-
         localStorage.setItem("sessionToken", response.token);
         return true;
     }
-    
->>>>>>> Stashed changes
     public async forgotPassword(request: ForgotPasswordRequest) : Promise<ForgotPasswordResponse> {
         return (await axios.post<ForgotPasswordResponse>(`${this.baseUrl}/api/auth/forgotpassword`, request, this.unauthConfig)).data;
     }
@@ -173,4 +166,12 @@ export class Controller {
     public async resetPassword(request: ResetPasswordRequest) : Promise<ResetPasswordResponse> {
         return (await axios.post<ResetPasswordResponse>(`${this.baseUrl}/api/auth/resetpassword`, request, this.unauthConfig)).data;
     }
+
+    public async getDefaultProperties() : Promise<ServerProperty[]> {
+        return (await axios.get<ServerProperty[]>(`${this.baseUrl}/api/server/defaultproperties`, this.authConfig)).data;
+    }
 }
+
+const api = new Controller("https://api.marksgamedomain.net:8443");
+
+export default api;

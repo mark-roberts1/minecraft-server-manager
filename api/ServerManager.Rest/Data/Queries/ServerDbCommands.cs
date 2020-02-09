@@ -157,5 +157,11 @@ namespace ServerManager.Rest.Data
                     ON 1 = 1
             WHERE
                 TemplateId = $TemplateId;";
+
+        public const string SelectDefaultProperties = @"
+            SELECT
+                Properties
+            FROM
+                DefaultProperties";
     }
 }

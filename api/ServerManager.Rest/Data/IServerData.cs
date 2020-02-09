@@ -16,5 +16,6 @@ namespace ServerManager.Rest.Data
         Task<AddTemplateResponse> AddTemplateAsync(AddTemplateRequest addTemplateRequest, CancellationToken cancellationToken);
         Task<Template> GetTemplateAsync(int templateId, CancellationToken cancellationToken);
         Task<UpdateTemplateResponse> UpdateTemplateAsync(UpdateTemplateRequest updateTemplateRequest, CancellationToken cancellationToken);
+        Task<ServerPropertyList> GetDefaultPropertiesAsync(CancellationToken cancellationToken);
     }
 }
