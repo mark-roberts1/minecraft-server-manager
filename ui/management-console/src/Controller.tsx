@@ -156,6 +156,16 @@ export class Controller {
         return true;
     }
 
+<<<<<<< Updated upstream
+=======
+    public async logout() : Promise<boolean> {
+        let response = (await axios.post<TokenResponse>(`${this.baseUrl}/api/auth/endsession`, null, this.authConfig)).data;
+
+        localStorage.setItem("sessionToken", response.token);
+        return true;
+    }
+    
+>>>>>>> Stashed changes
     public async forgotPassword(request: ForgotPasswordRequest) : Promise<ForgotPasswordResponse> {
         return (await axios.post<ForgotPasswordResponse>(`${this.baseUrl}/api/auth/forgotpassword`, request, this.unauthConfig)).data;
     }
