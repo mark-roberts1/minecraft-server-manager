@@ -83,8 +83,6 @@ namespace ServerManager.Rest.Management
 
             _servers.Remove(wrapper);
 
-            wrapper.Dispose();
-
             response.ServerDeleted = true;
 
             return response;

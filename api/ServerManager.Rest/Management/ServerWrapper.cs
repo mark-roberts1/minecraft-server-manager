@@ -13,14 +13,11 @@ using System.Net;
 
 namespace ServerManager.Rest.Management
 {
-    public class ServerWrapper : IDisposable
+    public class ServerWrapper
     {
-        private bool disposed;
-        private IRconClient rconClient;
         private readonly IDiskOperator _diskOperator;
         private readonly ILogger _logger;
         private readonly string _serverPath;
-        private bool authenticated;
         private string _propertiesPath => _diskOperator.CombinePaths(_serverPath, "server.properties");
 
         public ServerWrapper(ServerInfo serverInfo, IConfiguration configuration, IDiskOperator diskOperator, ILoggerFactory loggerFactory)
@@ -47,26 +44,10 @@ namespace ServerManager.Rest.Management
                 using (_diskOperator.CreateFile(_propertiesPath)) { }
 
                 _diskOperator.WriteAllLines(_propertiesPath, Server.Properties.GetLines().ToArray());
-            }
-
-            if (Server.Properties.RconEnabled && rconClient == null)
-            {
-                rconClient = new RconClient("192.168.1.17", Server.Properties.RconPort);
-                rconClient.LogAction = (message) =>
-                {
-                    _logger.Log(LogLevel.Info, $"From RconClient: \"{message}\"");
-                };
-            }
-                
+            }    
         }
 
         public ServerInfo Server { get; }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
         public StartResponse Start()
         {
@@ -102,13 +83,19 @@ namespace ServerManager.Rest.Management
 
         public async Task<bool> StopAsync(CancellationToken cancellationToken)
         {
-            if (rconClient == null) throw new InvalidOperationException("RCON is not enabled on this server.");
-
-            LoginIfNecessary();
-
             try
             {
-                var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand("stop"), cancellationToken);
+                using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
+                {
+                    rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
+
+                    rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
+
+                    var response = rconClient.ExecuteCommand(RconCommand.ServerCommand("stop"));
+                    
+                    _logger.Log(LogLevel.Info, response.ResponseText);
+                }
+
                 Server.Status = ServerStatus.Stopped;
                 return true;
             }
@@ -121,13 +108,19 @@ namespace ServerManager.Rest.Management
 
         public bool Stop()
         {
-            if (rconClient == null) throw new InvalidOperationException("RCON is not enabled on this server.");
-
-            LoginIfNecessary();
-
             try
             {
-                var response = rconClient.ExecuteCommand(RconCommand.ServerCommand("stop"));
+                using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
+                {
+                    rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
+
+                    rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
+
+                    var response = rconClient.ExecuteCommand(RconCommand.ServerCommand("stop"));
+
+                    _logger.Log(LogLevel.Info, response.ResponseText);
+                }
+
                 Server.Status = ServerStatus.Stopped;
                 return true;
             }
@@ -140,19 +133,24 @@ namespace ServerManager.Rest.Management
 
         public async Task<ServerCommandResponse> IssueCommandAsync(string command, CancellationToken cancellationToken)
         {
-            if (rconClient == null) throw new InvalidOperationException("RCON is not enabled on this server.");
-
-            LoginIfNecessary();
-
             try
             {
-                var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand(command), cancellationToken);
-
-                return new ServerCommandResponse
+                using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
                 {
-                    Succeeded = true,
-                    Log = response.ResponseText
-                };
+                    rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
+
+                    rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
+
+                    var response = rconClient.ExecuteCommand(RconCommand.ServerCommand(command));
+
+                    _logger.Log(LogLevel.Info, response.ResponseText);
+
+                    return new ServerCommandResponse
+                    {
+                        Log = response.ResponseText,
+                        Succeeded = true
+                    };
+                }
             }
             catch (Exception ex)
             {
@@ -160,39 +158,9 @@ namespace ServerManager.Rest.Management
 
                 return new ServerCommandResponse
                 {
-                    Succeeded = false,
-                    Log = ex.PrintFull()
+                    Log = ex.Message,
+                    Succeeded = false
                 };
-            }
-        }
-
-        private void LoginIfNecessary()
-        {
-            if (authenticated || !Server.Properties.RconEnabled || string.IsNullOrWhiteSpace(Server.Properties.RconPassword))
-            {
-                return;
-            }
-
-            try
-            {
-                var response = rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
-                authenticated = true;
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, ex);
-                throw;
-            }
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed) return;
-
-            if (disposing)
-            {
-                rconClient?.Dispose();
-                disposed = true;
             }
         }
 
