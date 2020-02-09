@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Controller } from './Controller';
 import { LoginRequest } from './models/LoginRequest';
 import Home from './components/Home';
+import Logout from './components/Logout';
 
 const App: React.FC = () => {
   
@@ -32,6 +33,9 @@ const App: React.FC = () => {
           </Route>
           <Route path="/users">
             <UserList/>
+          </Route>
+          <Route path="/logout">
+            <Logout/>
           </Route>
         </Switch>
       </div>
