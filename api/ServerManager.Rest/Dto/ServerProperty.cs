@@ -10,7 +10,14 @@ namespace ServerManager.Rest.Dto
         public ServerProperty() { }
         
         public string Key { get; set; }
-        public string Value { get; set; }
+        
+        private string value;
+
+        public string Value 
+        { 
+            get => this.value; 
+            set => this.value = value; 
+        }
 
         public static implicit operator ServerProperty(string fileLine)
         {

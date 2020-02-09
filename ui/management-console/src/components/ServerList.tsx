@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ServerInfo } from '../models/ServerInfo';
+import { ServerInfo, ServerStatus } from '../models/ServerInfo';
 import api from '../Controller';
 import './ServerList.scss';
+import './AddModal.scss';
+import runningImg from '../media/server-running.png';
+import stoppedImg from '../media/server-stopped.png';
 import { Link } from 'react-router-dom';
 import { CreateServerRequest } from '../models/CreateServerRequest';
 
 class ServersState {
     constructor(servers: ServerInfo[]) {
-        this.servers = [];
+        this.servers = servers;
         this.loaded = false;
         this.showAdd = false;
     }
@@ -20,15 +23,33 @@ class ServersState {
 const ServerList: React.FC = () => {
     const [serversState, setServers] = useState(new ServersState([]));
     const [newServer, setNewServer] = useState(new CreateServerRequest());
-
-    const loaded = false;
-
+    
     const handlePropUpdate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         let items = [...newServer.properties];
         let prop = {...items[index]};
         prop.value = e.target.value;
         items[index] = prop;
         setNewServer({...newServer, properties: items})
+    }
+
+    const addServer = (e: React.MouseEvent<HTMLButtonElement>) => {
+        api.createServer(newServer)
+            .then(result => {
+                if (result.created) {
+                    let items = serversState.servers;
+        
+                    items.push({
+                        serverId: result.serverId,
+                        name: newServer.name,
+                        version: newServer.version,
+                        description: newServer.description,
+                        properties: newServer.properties,
+                        status: ServerStatus.Stopped
+                    });
+
+                    setServers({...serversState, showAdd: false, servers: items });
+                }
+            })
     }
 
     useEffect(() => {
@@ -58,15 +79,31 @@ const ServerList: React.FC = () => {
                 }
                 {serversState.servers.length > 0 &&
                     serversState.servers.map((server, index) => {
-                        return (<div id={server.serverId.toString()} className="server">
-
-                        </div>)
+                        return (
+                            <div id={server.serverId.toString()} className="server">
+                                {server.status == ServerStatus.Stopped &&
+                                    <img className="server-field status-img" src={stoppedImg} />
+                                }
+                                {server.status == ServerStatus.Started &&
+                                    <img className="server-field status-img" src={runningImg} />
+                                }
+                                <div className="server-field">
+                                    <span className="server-name">{server.name}</span>
+                                </div>
+                                <div className="server-field small">
+                                    <span className="server-version">{server.version}</span>
+                                </div>
+                                <div className="server-field large">
+                                    <span className="server-description">{server.description}</span>
+                                </div>
+                            </div>
+                        )
                     })
                 }
             </div>
             {serversState.showAdd &&
-                <div className="add-server-backdrop">
-                    <div className="add-server-modal">
+                <div className="add-modal-backdrop">
+                    <div className="add-modal">
                         <div className="modal-header">
                             <h2 className="header-item">New Server</h2>
                             <div className="close header-item" onClick={e => setServers({...serversState, showAdd: false})}>X</div>
@@ -100,10 +137,11 @@ const ServerList: React.FC = () => {
                             </ul>
                         </div>
                         <div className="modal-footer">
-                            <button className="submit-btn modal-submit">Add</button>
+                            <button className="submit-btn modal-submit" onClick={e => addServer(e)}>Add</button>
                         </div>
                     </div>
-                </div>}
+                </div>
+            }
         </div>
     )
 }

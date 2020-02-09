@@ -50,7 +50,14 @@ namespace ServerManager.Rest.Management
             }
 
             if (Server.Properties.RconEnabled && rconClient == null)
-                rconClient = new RconClient(_serverPath, Server.Properties.RconPort);
+            {
+                rconClient = new RconClient("192.168.1.17", Server.Properties.RconPort);
+                rconClient.LogAction = (message) =>
+                {
+                    _logger.Log(LogLevel.Info, $"From RconClient: \"{message}\"");
+                };
+            }
+                
         }
 
         public ServerInfo Server { get; }
@@ -87,7 +94,6 @@ namespace ServerManager.Rest.Management
             };
 
             resp.DidStart = process.Start();
-            resp.Log = process.StandardOutput.ReadToEnd();
 
             Server.Status = ServerStatus.Started;
 

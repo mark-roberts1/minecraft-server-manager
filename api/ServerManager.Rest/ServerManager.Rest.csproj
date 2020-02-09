@@ -21,12 +21,17 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="NLog" Version="4.6.8" />
-    <PackageReference Include="Rcon.Client" Version="1.0.0" />
     <PackageReference Include="sharpcompress" Version="0.24.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.0.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Rcon.Client">
+      <HintPath>..\..\..\RconClient\src\Rcon.Client\bin\Debug\netstandard2.0\Rcon.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

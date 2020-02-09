@@ -1,10 +1,10 @@
 @import '../Globals.scss';
 
-$server-actions-height: 150px;
-$list-height: calc(100% - #{$server-actions-height});
+$template-actions-height: 150px;
+$list-height: calc(100% - #{$template-actions-height});
 $list-gutter-total: 30px;
 
-.server-list {
+.template-list {
     display: flex;
     height: 100%;
 
@@ -39,18 +39,18 @@ $list-gutter-total: 30px;
             }
         }
 
-        .server {
+        .template {
             width: 100%;
             text-align: left;
             padding: 10px;
             display: flex;
             cursor: pointer;
             
-            img.server-field {
+            img.template-field {
                 width: auto;
             }
 
-            .server-field {
+            .template-field {
                 margin: auto 20px;
                 width: calc((100% - 185px) / 3);
                 overflow: hidden;

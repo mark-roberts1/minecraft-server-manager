@@ -255,6 +255,10 @@ namespace ServerManager.Rest.Data
         {
             try
             {
+                var didStop = await _serverManager.StopAsync(serverId, cancellationToken);
+
+                if (didStop) return false;
+
                 using var connection = _connectionFactory.BuildConnection(_connectionString);
 
                 using var command = _commandFactory.BuildCommand(ServerDbCommands.UpdateServerStatus, CommandType.Text, connection,
@@ -263,7 +267,7 @@ namespace ServerManager.Rest.Data
 
                 await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
 
-                return await _serverManager.StopAsync(serverId, cancellationToken);
+                return true;
             }
             catch (Exception ex)
             {
