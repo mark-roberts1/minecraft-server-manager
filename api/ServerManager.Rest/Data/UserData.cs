@@ -459,7 +459,6 @@ namespace ServerManager.Rest.Data
         public async Task<UpdateUsernameResponse> UpdateUsernameAsync(int userId, UpdateUsernameRequest updateRequest, CancellationToken cancellationToken)
         {
             var response = new UpdateUsernameResponse();
-
             try
             {
                 using var connection = _connectionFactory.BuildConnection(_connectionString);
@@ -469,9 +468,7 @@ namespace ServerManager.Rest.Data
                     DbParameter.From("$MinecraftUsername", updateRequest.NewUsername),
                     DbParameter.From( "$UserId", userId));
 
-                var affected = await _commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
-
-                response.Updated = affected == 1;
+                return await _commandExecutor.ExecuteSingleAsync<UpdateUsernameResponse>(command, cancellationToken);
             }
             catch (Exception ex)
             {

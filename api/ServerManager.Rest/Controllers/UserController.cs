@@ -66,8 +66,8 @@ namespace ServerManager.Rest.Controllers
 
             return await UserData.UpdateUserEmailAsync(userId, updateRequest, cancellationToken);
         }
-        [HttpPut("{userId}/updateUsername")]
-        public async Task<UpdateUsernameResponse> UpdateUsernameAsync([FromRoute] int userId, [FromBody] UpdateEmailRequest updateRequest, CancellationToken cancellationToken)
+        [HttpPut("{userId}/updateMinecraftUsername")]
+        public async Task<UpdateUsernameResponse> UpdateUsernameAsync([FromRoute] int userId, [FromBody] UpdateUsernameRequest updateRequest, CancellationToken cancellationToken)
         {
             await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
 
