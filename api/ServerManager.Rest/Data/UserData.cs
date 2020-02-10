@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Data;
 using Microsoft.AspNetCore.Identity;
+using ServerManager.Rest.Controllers;
 
 namespace ServerManager.Rest.Data
 {
@@ -450,6 +451,29 @@ namespace ServerManager.Rest.Data
             {
                 _logger.Log(LogLevel.Error, ex);
                 response.PasswordReset = false;
+            }
+
+            return response;
+        }
+
+        public async Task<UpdateUsernameResponse> UpdateUsernameAsync(int userId, UpdateUsernameRequest updateRequest, CancellationToken cancellationToken)
+        {
+            var response = new UpdateUsernameResponse();
+            try
+            {
+                using var connection = _connectionFactory.BuildConnection(_connectionString);
+                using var command = _commandFactory.BuildCommand(UserCommands.UpdateUsername,
+                    CommandType.Text,
+                    connection,
+                    DbParameter.From("$MinecraftUsername", updateRequest.NewUsername),
+                    DbParameter.From( "$UserId", userId));
+
+                return await _commandExecutor.ExecuteSingleAsync<UpdateUsernameResponse>(command, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex);
+                response.Updated = false;
             }
 
             return response;

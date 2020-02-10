@@ -155,6 +155,14 @@ namespace ServerManager.Rest.Data
             WHERE
                 UserId = $UserId
         ";
+        public const string UpdateUsername = @"
+            UPDATE
+                User
+            SET
+                MinecraftUsername = $MinecraftUsername
+            WHERE
+                UserId = $UserId
+        ";
         public const string LogOut = @"
         DELETE 
             FROM UserSession 

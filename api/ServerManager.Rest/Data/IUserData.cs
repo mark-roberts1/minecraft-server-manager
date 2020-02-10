@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ServerManager.Rest.Controllers;
 using ServerManager.Rest.Dto;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,6 @@ namespace ServerManager.Rest.Data
         Task<UpdateRoleResponse> UpdateUserRole(int userId, UserRole userRole, CancellationToken cancellationToken);
         Task<ToggleUserLockResponse> ToggleUserLockAsync(int userId, CancellationToken cancellationToken);
         Task<ResetPasswordResponse> ResetUserPasswordAsync(int userId, string password, CancellationToken cancellationToken);
-        
+        Task<UpdateUsernameResponse> UpdateUsernameAsync(int userId, UpdateUsernameRequest updateRequest, CancellationToken cancellationToken);
     }
 }
