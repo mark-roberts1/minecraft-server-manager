@@ -66,6 +66,13 @@ namespace ServerManager.Rest.Controllers
 
             return await UserData.UpdateUserEmailAsync(userId, updateRequest, cancellationToken);
         }
+        [HttpPut("{userId}/updateUsername")]
+        public async Task<UpdateUsernameResponse> UpdateUsernameAsync([FromRoute] int userId, [FromBody] UpdateEmailRequest updateRequest, CancellationToken cancellationToken)
+        {
+            await ThrowIfNotAdminOrNotAuthenticatedUser(userId);
+
+            return await UserData.UpdateUsernameAsync(userId, updateRequest, cancellationToken);
+        }
 
         [HttpPost("invite")]
         public async Task<InviteUserResponse> InviteUserAsync([FromBody] InviteUserRequest inviteRequest, CancellationToken cancellationToken)

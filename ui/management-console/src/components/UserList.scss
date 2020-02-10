@@ -1,0 +1,49 @@
+@import '../Globals.scss';
+
+$server-actions-height: 150px;
+$list-height: calc(100% - #{$server-actions-height});
+$list-gutter-total: 30px;
+
+.user-list {
+    display: flex;
+    height: 100%;
+
+    .list {
+        text-align: center;
+        margin: auto;
+        height: calc(100% - #{$list-gutter-total});
+        width: calc(100% - #{$list-gutter-total});
+        max-width: 1500px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        overflow-x: hidden;
+
+        .user {
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+            display: flex;
+            cursor: pointer;
+
+            .user-field {
+                margin: auto 20px;
+                width: calc((100% - 185px) / 2);
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                &.small {
+                    width: calc((100% - 185px) / 6);
+                }
+
+                &.large {
+                    width: calc((100% - 185px) * 5 / 12);
+                }
+            }
+
+            &:hover {
+                background-color: rgba($coal, 0.4);
+                color: #fff;
+            }
+        }
+    }
+}
