@@ -31,23 +31,23 @@ const UserList: React.FC = () => {
                         return (
                             
                             
-                            <div id={user.userId.toString()} className="user">
-                            <div className="user-field">
-                                <span className="username">
-                                    Username: {user.username}
-                                </span>
-                            </div>
-                            <div className="user-field">
-                                {user.minecraftUsername != null && 
-                                    <span className="mc-username">
-                                    MC Username:
-                                </span>}
-                                {user.minecraftUsername == null && 
-                                    <span className="mc-username">
-                                    MC Username: unset
+                            <div id={user.userId.toString()} key={user.userId} className="user">
+                                <div className="user-field">
+                                    <span className="username">
+                                        Username: {user.username}
+                                    </span>
+                                </div>
+                                <div className="user-field">
+                                    {user.minecraftUsername != null && 
+                                        <span className="mc-username">
+                                        MC Username:
                                     </span>}
+                                    {user.minecraftUsername == null && 
+                                        <span className="mc-username">
+                                        MC Username: unset
+                                        </span>}
+                                </div>
                             </div>
-                        </div>
                         )
                     })
                     

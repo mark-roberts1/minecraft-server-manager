@@ -18,6 +18,8 @@ const App: React.FC = () => {
     setUser({...user, isAuthenticated: isLoggedIn});
   }
 
+  console.log = function(){};
+
   const [user, setUser] = useState<LoggedOnUser>({
     isAuthenticated: false,
     setAuthenticated: authenticateUser,
@@ -39,7 +41,7 @@ const App: React.FC = () => {
             !user.isAuthenticated &&
             <Redirect to="/login" {...user} />
           }
-          <Route path="/home">
+          <Route exact path="/">
             <Home/>
           </Route>
           <Route path="/servers">

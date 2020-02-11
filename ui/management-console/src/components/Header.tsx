@@ -7,9 +7,16 @@ import LoggedOnUser from '../models/LoggedOnUser';
 const Header : React.FC<LoggedOnUser> = (user: LoggedOnUser) => {
     return (
         <header>
-            <Link to="/home">
+            {
+                user.isAuthenticated &&
+                <Link to="/">
+                    <img src={icon} alt=""/>
+                </Link>
+            }
+            {
+                !user.isAuthenticated &&
                 <img src={icon} alt=""/>
-            </Link>
+            }
             {
                 user.isAuthenticated &&
                 <nav>

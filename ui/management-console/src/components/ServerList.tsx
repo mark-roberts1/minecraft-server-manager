@@ -80,7 +80,7 @@ const ServerList: React.FC = () => {
                 {serversState.servers.length > 0 &&
                     serversState.servers.map((server, index) => {
                         return (
-                            <div id={server.serverId.toString()} className="server">
+                            <div id={server.serverId.toString()} key={server.serverId} className="server">
                                 {server.status == ServerStatus.Stopped &&
                                     <img className="server-field status-img" src={stoppedImg} />
                                 }

@@ -67,7 +67,7 @@ const TemplateList: React.FC = () => {
                 {templatesState.templates.length > 0 &&
                     templatesState.templates.map((template, index) => {
                         return (
-                            <div id={template.templateId.toString()} className="template">
+                            <div id={template.templateId.toString()} key={template.templateId} className="template">
                                 <div className="template-field">
                                     <span className="template-name">{template.name}</span>
                                 </div>
