@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
 import api from '../Controller';
 import { Redirect } from 'react-router-dom'
-const Logoutapi = async () => {let logout = await api.logout();}
-const Logout: React.FC = () => {
+import LoggedOnUser from '../models/LoggedOnUser';
+import { User } from '../models/User';
+
+const Logout: React.FC<LoggedOnUser> = (user: LoggedOnUser) => {
     useEffect(() => {
-        Logoutapi();
-        console.log("yeet");
+        api.logout()
+            .then(res => user.setAuthenticated(new User(), false));
     })
     return (
-        <Redirect  to='/Home'/>
+        <div>
+            {
+                user.isAuthenticated &&
+                <Redirect  to='/'/>
+            }
+        </div>
+        
     )
 }
 

@@ -1,29 +1,46 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.scss';
 import Header from './components/Header'
 import Login from './components/Login'
 import ServerList from './components/ServerList'
 import TemplateList from './components/TemplateList'
 import UserList from './components/UserList';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Controller } from './Controller';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import api, { Controller } from './Controller';
 import { LoginRequest } from './models/LoginRequest';
 import Home from './components/Home';
 import Logout from './components/Logout';
+import LoggedOnUser from './models/LoggedOnUser';
+import { User, UserRole } from './models/User';
 
 const App: React.FC = () => {
+  const authenticateUser = (authenticatedUser: User, isLoggedIn: boolean) => {
+    setUser({...user, isAuthenticated: isLoggedIn});
+  }
+
+  const [user, setUser] = useState<LoggedOnUser>({
+    isAuthenticated: false,
+    setAuthenticated: authenticateUser,
+    userId: 0,
+    minecraftUsername: "",
+    username: "",
+    email: "",
+    isLocked: false,
+    userRole: UserRole.Normal
+  });
   
   return (
     <Router>
     <div className="App">
-      <Header></Header>
+      <Header {...user}></Header>
       <div className="app-content">
         <Switch>
+          {
+            !user.isAuthenticated &&
+            <Redirect to="/login" {...user} />
+          }
           <Route path="/home">
             <Home/>
-          </Route>
-          <Route path="/login">
-            <Login/>
           </Route>
           <Route path="/servers">
             <ServerList/>
@@ -35,9 +52,12 @@ const App: React.FC = () => {
             <UserList/>
           </Route>
           <Route path="/logout">
-            <Logout/>
+            <Logout {...user} />
           </Route>
         </Switch>
+        <Route path="/login">
+          <Login {...user} />
+        </Route>
       </div>
     </div>
     </Router>
