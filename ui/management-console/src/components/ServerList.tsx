@@ -5,7 +5,7 @@ import './ServerList.scss';
 import './AddModal.scss';
 import runningImg from '../media/server-running.png';
 import stoppedImg from '../media/server-stopped.png';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import { CreateServerRequest } from '../models/CreateServerRequest';
 
 class ServersState {
@@ -80,23 +80,29 @@ const ServerList: React.FC = () => {
                 {serversState.servers.length > 0 &&
                     serversState.servers.map((server, index) => {
                         return (
-                            <div id={server.serverId.toString()} key={server.serverId} className="server">
-                                {server.status == ServerStatus.Stopped &&
-                                    <img className="server-field status-img" src={stoppedImg} />
-                                }
-                                {server.status == ServerStatus.Started &&
-                                    <img className="server-field status-img" src={runningImg} />
-                                }
-                                <div className="server-field">
-                                    <span className="server-name">{server.name}</span>
+                            <Link 
+                                key={server.serverId}
+                                to={{
+                                    pathname: `server/${server.serverId}`
+                                }}>
+                                <div id={server.serverId.toString()} className="server">
+                                    {server.status == ServerStatus.Stopped &&
+                                        <img className="server-field status-img" src={stoppedImg} />
+                                    }
+                                    {server.status == ServerStatus.Started &&
+                                        <img className="server-field status-img" src={runningImg} />
+                                    }
+                                    <div className="server-field">
+                                        <span className="server-name">{server.name}</span>
+                                    </div>
+                                    <div className="server-field small">
+                                        <span className="server-version">{server.version}</span>
+                                    </div>
+                                    <div className="server-field large">
+                                        <span className="server-description">{server.description}</span>
+                                    </div>
                                 </div>
-                                <div className="server-field small">
-                                    <span className="server-version">{server.version}</span>
-                                </div>
-                                <div className="server-field large">
-                                    <span className="server-description">{server.description}</span>
-                                </div>
-                            </div>
+                            </Link>
                         )
                     })
                 }

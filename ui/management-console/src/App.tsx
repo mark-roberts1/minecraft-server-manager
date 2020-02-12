@@ -6,12 +6,12 @@ import ServerList from './components/ServerList'
 import TemplateList from './components/TemplateList'
 import UserList from './components/UserList';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
-import api, { Controller } from './Controller';
-import { LoginRequest } from './models/LoginRequest';
 import Home from './components/Home';
 import Logout from './components/Logout';
 import LoggedOnUser from './models/LoggedOnUser';
 import { User, UserRole } from './models/User';
+import Server from './components/Server';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App: React.FC = () => {
   const authenticateUser = (authenticatedUser: User, isLoggedIn: boolean) => {
@@ -59,6 +59,9 @@ const App: React.FC = () => {
         </Switch>
         <Route path="/login">
           <Login {...user} />
+        </Route>
+        <Route path="/server/:serverId">
+          <Server />
         </Route>
       </div>
     </div>
