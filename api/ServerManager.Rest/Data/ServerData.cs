@@ -257,7 +257,7 @@ namespace ServerManager.Rest.Data
             {
                 var didStop = await _serverManager.StopAsync(serverId, cancellationToken);
 
-                if (didStop) return false;
+                if (!didStop) return false;
 
                 using var connection = _connectionFactory.BuildConnection(_connectionString);
 

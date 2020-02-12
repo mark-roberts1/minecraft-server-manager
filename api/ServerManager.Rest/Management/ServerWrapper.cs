@@ -89,9 +89,9 @@ namespace ServerManager.Rest.Management
                 {
                     rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
 
-                    rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
+                    await rconClient.ExecuteCommandAsync(RconCommand.Auth(Server.Properties.RconPassword), cancellationToken);
 
-                    var response = rconClient.ExecuteCommand(RconCommand.ServerCommand("stop"));
+                    var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand("stop"), cancellationToken);
                     
                     _logger.Log(LogLevel.Info, response.ResponseText);
                 }
@@ -139,9 +139,9 @@ namespace ServerManager.Rest.Management
                 {
                     rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
 
-                    rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
+                    await rconClient.ExecuteCommandAsync(RconCommand.Auth(Server.Properties.RconPassword), cancellationToken);
 
-                    var response = rconClient.ExecuteCommand(RconCommand.ServerCommand(command));
+                    var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand(command), cancellationToken);
 
                     _logger.Log(LogLevel.Info, response.ResponseText);
 
