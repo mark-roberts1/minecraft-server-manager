@@ -1,0 +1,30 @@
+.server {
+    width: 80%;
+    margin: 0 auto;
+    
+    .status-img-wrapper {
+        .status-img {
+            margin-top: 10px;
+        }
+    }
+
+    .console-wrapper {
+        background-color: #454d55;
+
+        .console-output {
+            background-color: #343a40;
+            color: #fff;
+            font-family: 'Fira Code', monospace;
+
+            samp {
+                font-family: 'Fira Code', monospace;
+            }
+        }
+    }
+
+    .property-input {
+        background-color: transparent;
+        color: #fff;
+        border: none;
+    }
+}
