@@ -87,8 +87,6 @@ namespace ServerManager.Rest.Management
             {
                 using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
                 {
-                    rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
-
                     await rconClient.ExecuteCommandAsync(RconCommand.Auth(Server.Properties.RconPassword), cancellationToken);
 
                     var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand("stop"), cancellationToken);
@@ -112,8 +110,6 @@ namespace ServerManager.Rest.Management
             {
                 using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
                 {
-                    rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
-
                     rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
 
                     var response = rconClient.ExecuteCommand(RconCommand.ServerCommand("stop"));
@@ -137,8 +133,6 @@ namespace ServerManager.Rest.Management
             {
                 using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
                 {
-                    rconClient.LogAction = msg => _logger.Log(LogLevel.Info, $"From RconClient: \"{msg}\"");
-
                     await rconClient.ExecuteCommandAsync(RconCommand.Auth(Server.Properties.RconPassword), cancellationToken);
 
                     var response = await rconClient.ExecuteCommandAsync(RconCommand.ServerCommand(command), cancellationToken);
