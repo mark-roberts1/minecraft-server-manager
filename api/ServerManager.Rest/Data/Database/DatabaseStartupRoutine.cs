@@ -45,13 +45,6 @@ namespace ServerManager.Rest.Database.Sqlite
         {
             _logger.Log(LogLevel.Info, "Starting database routine...");
 
-            //if (!_diskOperator.FileExists(_dbFileName))
-            //{
-            //    _logger.Log(LogLevel.Info, $"A database file was not found. Creating {_dbFileName}");
-
-            //    using (var stream = _diskOperator.CreateFile(_dbFileName)) { }
-            //}
-
             try
             {
                 _logger.Log(LogLevel.Info, "Creating User table if not exists...");
@@ -130,6 +123,13 @@ namespace ServerManager.Rest.Database.Sqlite
                     {
                         await _commandExecutor.ExecuteNonQueryAsync(cmd);
                     }
+                }
+
+                _logger.Log(LogLevel.Info, "Setting Server states to Stopped...");
+
+                using (var cmd = _commandFactory.BuildCommand(ServerDbCommands.SetServerInitialState, CommandType.Text, connection))
+                {
+                    await _commandExecutor.ExecuteNonQueryAsync(cmd);
                 }
             }
             catch (Exception ex)

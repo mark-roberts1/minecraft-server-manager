@@ -163,5 +163,7 @@ namespace ServerManager.Rest.Data
                 Properties
             FROM
                 DefaultProperties";
+
+        public const string SetServerInitialState = @"UPDATE Server SET Status = 0";
     }
 }
