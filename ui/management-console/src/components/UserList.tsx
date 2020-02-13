@@ -4,6 +4,7 @@ import { setServers } from 'dns';
 import { User } from '../models/User';
 import './UserList.scss';
 import './AddModal.scss';
+import { Link } from 'react-router-dom';
 
 class UsersState {
     constructor(users: User[]){
@@ -30,24 +31,25 @@ const UserList: React.FC = () => {
                     usersState.users.map((user, index) => {
                         return (
                             
-                            
-                            <div id={user.userId.toString()} key={user.userId} className="user">
-                                <div className="user-field">
-                                    <span className="username">
-                                        Username: {user.username}
-                                    </span>
-                                </div>
-                                <div className="user-field">
-                                    {user.minecraftUsername != null && 
-                                        <span className="mc-username">
-                                        MC Username:
-                                    </span>}
-                                    {user.minecraftUsername == null && 
-                                        <span className="mc-username">
-                                        MC Username: unset
+                            <Link key={user.userId} to={`user/${user.userId}`}>
+                                <div id={user.userId.toString()} key={user.userId} className="user">
+                                    <div className="user-field">
+                                        <span className="username">
+                                            Username: {user.username}
+                                        </span>
+                                    </div>
+                                    <div className="user-field">
+                                        {user.minecraftUsername != null && 
+                                            <span className="mc-username">
+                                            MC Username:
                                         </span>}
+                                        {user.minecraftUsername == null && 
+                                            <span className="mc-username">
+                                            MC Username: unset
+                                            </span>}
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         )
                     })
                     

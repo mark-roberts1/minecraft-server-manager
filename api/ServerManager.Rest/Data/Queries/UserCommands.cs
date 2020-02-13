@@ -124,7 +124,7 @@ namespace ServerManager.Rest.Data
             SET
                 IsLocked = CASE IsLocked WHEN 1 THEN 0 ELSE 1 END
             WHERE
-                UserId = $UserId
+                UserId = $UserId;
 
             SELECT IsLocked FROM User WHERE UserId = $UserId
         ";

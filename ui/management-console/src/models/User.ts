@@ -7,7 +7,7 @@ export class User {
 		this.userRole = UserRole.Normal;
 		this.isLocked = false;
 	}
-
+	
 	userId: number;
 	username: string;
 	minecraftUsername: string;

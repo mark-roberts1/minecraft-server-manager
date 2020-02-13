@@ -12,6 +12,7 @@ import LoggedOnUser from './models/LoggedOnUser';
 import { User, UserRole } from './models/User';
 import Server from './components/Server';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UserPage from './components/UserPage';
 
 const App: React.FC = () => {
   const authenticateUser = (authenticatedUser: User, isLoggedIn: boolean) => {
@@ -62,6 +63,9 @@ const App: React.FC = () => {
         </Route>
         <Route path="/server/:serverId">
           <Server />
+        </Route>
+        <Route path="/user/:userId">
+          <UserPage />
         </Route>
       </div>
     </div>
