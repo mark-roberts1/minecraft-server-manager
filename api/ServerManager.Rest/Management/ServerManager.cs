@@ -13,21 +13,17 @@ namespace ServerManager.Rest.Management
     public class ServerManager : IServerManager
     {
         private static bool isInitialized;
-        private static readonly List<ServerWrapper> _servers = new List<ServerWrapper>();
-        private readonly IConfiguration _configuration;
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly IDiskOperator _diskOperator;
+        private static readonly List<IServer> _servers = new List<IServer>();
         private readonly ILogger _logger;
+        private readonly IServerFactory _serverFactory;
 
         public IEnumerable<ServerInfo> Servers => _servers.Select(s => s.Server);
         public bool IsInitialized => isInitialized;
 
-        public ServerManager(IConfiguration configuration, ILoggerFactory loggerFactory, IDiskOperator diskOperator)
+        public ServerManager(ILoggerFactory loggerFactory, IServerFactory serverFactory)
         {
-            _configuration = configuration;
-            _loggerFactory = loggerFactory;
-            _diskOperator = diskOperator;
             _logger = loggerFactory.GetLogger<ServerManager>();
+            _serverFactory = serverFactory;
         }
 
         public void Initialize(IEnumerable<ServerInfo> servers)
@@ -38,7 +34,7 @@ namespace ServerManager.Rest.Management
             {
                 try
                 {
-                    _servers.Add(new ServerWrapper(server, _configuration, _diskOperator, _loggerFactory));
+                    _servers.Add(_serverFactory.BuildServer(server));
                 }
                 catch (Exception ex)
                 {
@@ -55,7 +51,7 @@ namespace ServerManager.Rest.Management
 
         public async Task AddAsync(ServerInfo server, Template template, CancellationToken cancellationToken)
         {
-            var wrapper = new ServerWrapper(server, _configuration, _diskOperator, _loggerFactory);
+            var wrapper = _serverFactory.BuildServer(server);
 
             await wrapper.DownloadTemplateAsync(template.DownloadLink, cancellationToken);
 

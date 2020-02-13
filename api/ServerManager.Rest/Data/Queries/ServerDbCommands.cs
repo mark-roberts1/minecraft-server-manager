@@ -47,7 +47,11 @@ namespace ServerManager.Rest.Data
             );
         ";
 
-        public const string DeleteServer = @"DELETE FROM Server WHERE ServerId = $ServerId";
+        public const string DeleteServer = @"
+            DELETE FROM Server WHERE ServerId = $ServerId;";
+
+        public const string DeleteServerProperties = @"
+            DELETE FROM ServerProperties WHERE ServerId = $ServerId;";
 
         public const string SelectServer = @"
             SELECT

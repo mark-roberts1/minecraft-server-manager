@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using ServerManager.Rest.Data;
 using ServerManager.Rest.Dto;
 using ServerManager.Rest.Filters;
+using ServerManager.Rest.Management;
 
 namespace ServerManager.Rest.Controllers
 {
@@ -19,11 +20,20 @@ namespace ServerManager.Rest.Controllers
     public class ServerController : ApiController
     {
         private readonly IServerData _serverData;
+        private readonly IServerManager _serverManager;
 
-        public ServerController(IUserData userData, IServerData serverData)
+        public ServerController(IUserData userData, IServerData serverData, IServerManager serverManager)
             : base(userData)
         {
+            _serverManager = serverManager.ThrowIfNull(nameof(serverManager));
             _serverData = serverData.ThrowIfNull(nameof(serverData));
+
+            if (!_serverManager.IsInitialized)
+            {
+                var serversTask = _serverData.ListAsync(default);
+                serversTask.Wait();
+                _serverManager.Initialize(serversTask.Result);
+            }
         }
 
         [HttpGet("list")]
@@ -47,7 +57,25 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await _serverData.CreateAsync(createRequest, cancellationToken);
+            var template = await _serverData.GetTemplateAsync(createRequest.Version, cancellationToken);
+
+            if (template == null) throw new ArgumentException("createRequest.Version");
+
+            var response = await _serverData.CreateAsync(createRequest, cancellationToken);
+
+            var server = await _serverData.GetAsync(response.ServerId, cancellationToken);
+
+            try
+            {
+                await _serverManager.AddAsync(server, template, cancellationToken);
+            }
+            catch
+            {
+                await _serverData.DeleteAsync(server.ServerId, cancellationToken);
+                response.Created = false;
+            }
+
+            return response;
         }
 
         [HttpDelete("{serverId}/delete")]
@@ -55,13 +83,31 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await _serverData.DeleteAsync(serverId, cancellationToken);
+            var deletedPhysical = await _serverManager.DeleteAsync(serverId, cancellationToken);
+
+            var response = new DeleteServerResponse
+            {
+                ServerDeleted = deletedPhysical.ServerDeleted && (await _serverData.DeleteAsync(serverId, cancellationToken)).ServerDeleted
+            };
+
+            return response;
         }
 
         [HttpPut("{serverId}/update")]
         public async Task<UpdateServerResponse> UpdateAsync([FromRoute] int serverId, [FromBody] UpdateServerRequest updateRequest, CancellationToken cancellationToken)
         {
             ThrowIfNotAdmin();
+
+            var server = await _serverData.GetAsync(serverId, cancellationToken);
+
+            Template template = null;
+
+            if (server.Version != updateRequest.Version)
+            {
+                template = await _serverData.GetTemplateAsync(updateRequest.Version, cancellationToken);
+            }
+
+            await _serverManager.UpdateAsync(serverId, updateRequest, template, cancellationToken);
 
             return await _serverData.UpdateAsync(serverId, updateRequest, cancellationToken);
         }
@@ -102,8 +148,16 @@ namespace ServerManager.Rest.Controllers
         public async Task<StartResponse> StartAsync([FromRoute] int serverId, CancellationToken cancellationToken)
         {
             ThrowIfNotAdmin();
+            
+            var didStart = await _serverManager.StartAsync(serverId, cancellationToken);
 
-            return await _serverData.StartAsync(serverId, cancellationToken);
+            var response = new StartResponse
+            {
+                DidStart = didStart.DidStart && (await _serverData.StartAsync(serverId, cancellationToken)).DidStart,
+                Log = didStart.Log
+            };
+
+            return response;
         }
 
         [HttpPost("{serverId}/stop")]
@@ -111,7 +165,9 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await _serverData.StopAsync(serverId, cancellationToken);
+            var didStop = await _serverManager.StopAsync(serverId, cancellationToken);
+            
+            return didStop && await _serverData.StopAsync(serverId, cancellationToken);
         }
 
         [HttpPost("{serverId}/executecommand")]
@@ -119,7 +175,7 @@ namespace ServerManager.Rest.Controllers
         {
             ThrowIfNotAdmin();
 
-            return await _serverData.ExecuteCommandAsync(serverId, serverCommandRequest, cancellationToken);
+            return await _serverManager.ExecuteCommandAsync(serverId, serverCommandRequest, cancellationToken);
         }
 
         [HttpGet("defaultproperties")]

@@ -15,5 +15,6 @@ namespace ServerManager.Rest.Management
         Task AddAsync(ServerInfo server, Template template, CancellationToken cancellationToken);
         Task UpdateAsync(int serverId, UpdateServerRequest updateServerRequest, Template template, CancellationToken cancellationToken);
         ServerPropertyList GetServerProperties(int serverId);
+        Task<ServerCommandResponse> ExecuteCommandAsync(int serverId, ServerCommandRequest serverCommandRequest, CancellationToken cancellationToken);
     }
 }

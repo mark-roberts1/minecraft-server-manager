@@ -45,7 +45,7 @@ namespace ServerManager.Rest
                     builder.AllowAnyOrigin();
                     //builder.WithOrigins("https://api.marksgamedomain.net", "https://marksgamedomain.net", "https://www.marksgamedomain.net", "https://localhost:3000", "https://localhost:44345");
                     builder.AllowAnyHeader();
-                    builder.AllowAnyMethod();
+                    builder.WithMethods("GET", "PUT", "POST", "OPTIONS", "DELETE");
                     //builder.AllowCredentials();
                 });
             });
@@ -64,7 +64,9 @@ namespace ServerManager.Rest
 
                 //c.IncludeXmlComments($"ServerManager.Rest.xml");
             });
-
+            services.AddTransient<IRconClientFactory, RconClientFactory>();
+            services.AddTransient<IServerFactory, MinecraftServerFactory>();
+            services.AddTransient<IServerStarter, MinecraftServerStarter>();
             services.AddTransient<IUserData, UserData>();
             services.AddTransient<ILinkGenerator, LinkGenerator>();
             services.AddTransient<IDbConnectionFactory, SqliteConnectionFactory>();

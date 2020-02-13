@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -13,23 +11,35 @@ using System.Net;
 
 namespace ServerManager.Rest.Management
 {
-    public class ServerWrapper
+    public class MinecraftServer : IServer
     {
         private readonly IDiskOperator _diskOperator;
         private readonly ILogger _logger;
+        private readonly IRconClientFactory _rconClientFactory;
+        private readonly IServerStarter _serverStarter;
+        private readonly OperatingSystem _targetOs;
+        private readonly string _rconAddress;
         private readonly string _serverPath;
         private string _propertiesPath => _diskOperator.CombinePaths(_serverPath, "server.properties");
 
-        public ServerWrapper(ServerInfo serverInfo, IConfiguration configuration, IDiskOperator diskOperator, ILoggerFactory loggerFactory)
+        public MinecraftServer(ServerInfo serverInfo, 
+            IConfiguration configuration, 
+            IDiskOperator diskOperator, 
+            ILoggerFactory loggerFactory,
+            IServerStarter serverStarter,
+            IRconClientFactory rconClientFactory)
         {
-            var serverAddress = configuration.GetValue<string>("AppSettings:ServerAddress");
+            _rconAddress = configuration.GetValue<string>("AppSettings:RconAddress");
             var serversBasePath = configuration.GetValue<string>("AppSettings:ServerDirectory");
+            _targetOs = configuration.GetValue<OperatingSystem>("AppSettings:OperatingSystem");
 
             Server = serverInfo;
 
-            _logger = loggerFactory.GetLogger<ServerWrapper>();
+            _logger = loggerFactory.GetLogger<MinecraftServer>();
             _serverPath = diskOperator.CombinePaths(serversBasePath, serverInfo.GetUniqueServerName());
             _diskOperator = diskOperator;
+            _rconClientFactory = rconClientFactory.ThrowIfNull("rconClientFactory");
+            _serverStarter = serverStarter.ThrowIfNull("serverStarter");
 
             RefreshSettings();
         }
@@ -60,21 +70,7 @@ namespace ServerManager.Rest.Management
 
             var resp = new StartResponse();
 
-            using var process = new Process
-            {
-                // TODO: Make this work for windows or linux
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "/bin/bash",
-                    Arguments = "-c \"java -Xms1G -Xmx1G -jar server.jar\"",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WorkingDirectory = _serverPath
-                }
-            };
-
-            resp.DidStart = process.Start();
+            resp.DidStart = _serverStarter.StartServer(_serverPath, 512, 1024, _targetOs);
 
             Server.Status = ServerStatus.Started;
 
@@ -85,7 +81,7 @@ namespace ServerManager.Rest.Management
         {
             try
             {
-                using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
+                using (var rconClient = _rconClientFactory.GetRconClient(_rconAddress, Server.Properties.RconPort))
                 {
                     await rconClient.ExecuteCommandAsync(RconCommand.Auth(Server.Properties.RconPassword), cancellationToken);
 
@@ -108,7 +104,7 @@ namespace ServerManager.Rest.Management
         {
             try
             {
-                using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
+                using (var rconClient = _rconClientFactory.GetRconClient(_rconAddress, Server.Properties.RconPort))
                 {
                     rconClient.ExecuteCommand(RconCommand.Auth(Server.Properties.RconPassword));
 
@@ -131,7 +127,7 @@ namespace ServerManager.Rest.Management
         {
             try
             {
-                using (var rconClient = new RconClient("marksgamedomain.net", Server.Properties.RconPort))
+                using (var rconClient = _rconClientFactory.GetRconClient(_rconAddress, Server.Properties.RconPort))
                 {
                     await rconClient.ExecuteCommandAsync(RconCommand.Auth(Server.Properties.RconPassword), cancellationToken);
 
