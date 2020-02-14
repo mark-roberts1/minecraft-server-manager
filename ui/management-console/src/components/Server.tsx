@@ -116,12 +116,7 @@ const Server: React.FC = () => {
                 <h2 className="col-md-8 col-lg-8 col-sm-8">{serverState.server.name}</h2>
                 <div className="col-md-4 col-lg-4 col-sm-4">
                     <div className="float-right  mr-4">
-                        {serverState.server.status == ServerStatus.Stopped &&
-                            <img className="status-img" src={stoppedImg} />
-                        }
-                        {serverState.server.status == ServerStatus.Started &&
-                            <img className="status-img" src={runningImg} />
-                        }
+                        <img className="status-img" src={serverState.server.status == ServerStatus.Started ? runningImg : stoppedImg} />
                         <Button 
                             disabled={serverState.server.status == ServerStatus.Started} 
                             onClick={(e: any) => startServer()}

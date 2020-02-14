@@ -7,6 +7,10 @@ import runningImg from '../media/server-running.png';
 import stoppedImg from '../media/server-stopped.png';
 import { Link, Route } from 'react-router-dom';
 import { CreateServerRequest } from '../models/CreateServerRequest';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
+import Modal from 'react-bootstrap/Modal';
+import Td from './Td';
 
 class ServersState {
     constructor(servers: ServerInfo[]) {
@@ -68,86 +72,83 @@ const ServerList: React.FC = () => {
 
     return (
         <div className="server-list">
-            <div className="list">
-                <div className="action-container">
-                    <button className="server-add-btn" onClick={e => setServers({...serversState, showAdd: true})}>+ Add</button>
-                </div>
-                {serversState.servers.length == 0 &&
-                    <div className="empty">
-                        <h2>Nothing's going on here yet :(</h2>
+            <Modal size="lg" centered show={serversState.showAdd} onHide={() => setServers({...serversState, showAdd: false})}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Server</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <div className="field-wrapper full">
+                        <input type="textbox" className="field" placeholder="Name" name="name" 
+                            value={newServer.name} onChange={e => setNewServer({...newServer, name: e.target.value})} required />
+                        <label htmlFor="name" className="field-label">Name</label>
                     </div>
-                }
-                {serversState.servers.length > 0 &&
-                    serversState.servers.map((server, index) => {
-                        return (
-                            <Link 
-                                key={server.serverId}
-                                to={{
-                                    pathname: `server/${server.serverId}`
-                                }}>
-                                <div id={server.serverId.toString()} className="server">
-                                    {server.status == ServerStatus.Stopped &&
-                                        <img className="server-field status-img" src={stoppedImg} />
-                                    }
-                                    {server.status == ServerStatus.Started &&
-                                        <img className="server-field status-img" src={runningImg} />
-                                    }
-                                    <div className="server-field">
-                                        <span className="server-name">{server.name}</span>
-                                    </div>
-                                    <div className="server-field small">
-                                        <span className="server-version">{server.version}</span>
-                                    </div>
-                                    <div className="server-field large">
-                                        <span className="server-description">{server.description}</span>
-                                    </div>
-                                </div>
-                            </Link>
-                        )
-                    })
-                }
+                    <div className="field-wrapper full">
+                        <input type="textbox" className="field" placeholder="Version" name="version" 
+                            value={newServer.version} onChange={e => setNewServer({...newServer, version: e.target.value})} required />
+                        <label htmlFor="version" className="field-label">Version</label>
+                    </div>
+                    <div className="field-wrapper full">
+                        <input type="textbox" className="field" placeholder="Description" name="description" 
+                            value={newServer.description} onChange={e => setNewServer({...newServer, description: e.target.value})} required />
+                        <label htmlFor="description" className="field-label">Description</label>
+                    </div>
+                    <Table responsive striped hover variant="dark" className="pt-3">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {newServer.properties.map((property, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{property.key}</td>
+                                        <td><input itemType="textbox" className="property-input col-md-12 col-lg-12 col-sm-12" value={property.value} onChange={e => handlePropUpdate(e, index)} /></td>
+                                    </tr>
+                            )})}
+                        </tbody>
+                    </Table>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setServers({...serversState, showAdd: false})}>Cancel</Button>
+                    <Button variant="success" onClick={(e: any) => addServer(e)}>Create</Button>
+                </Modal.Footer>
+            </Modal>
+            <div className="list-container">
+                <div className="row action-container p-3">
+                    <div className="filler col-md-10 col-sm-0 col-lg-10"></div>
+                    <div className="col-md-2 col-sm-12 col-lg-2 float-right">
+                        <Button variant="success" className="server-add-btn col-md-12 col-sm-12 col-lg-12" onClick={(e: any) => setServers({...serversState, showAdd: true})}>+ Add</Button>
+                    </div>
+                </div>
+                <Table responsive striped hover variant="dark" className="pt-3">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Version</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {serversState.servers.map((server, index) => {
+                            return (
+                                <tr key={index}>
+                                    <Td to={`server/${server.serverId}`}>
+                                        <img className="server-field status-img" src={server.status == ServerStatus.Started ? runningImg : stoppedImg} />
+                                    </Td>
+                                    <Td to={`server/${server.serverId}`}>{server.name}</Td>
+                                    <Td to={`server/${server.serverId}`}>{server.version}</Td>
+                                    <Td to={`server/${server.serverId}`}>{server.description}</Td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </Table>
             </div>
-            {serversState.showAdd &&
-                <div className="add-modal-backdrop">
-                    <div className="add-modal">
-                        <div className="modal-header">
-                            <h2 className="header-item">New Server</h2>
-                            <div className="close header-item" onClick={e => setServers({...serversState, showAdd: false})}>X</div>
-                        </div>
-                        <div className="modal-body">
-                            <div className="field-wrapper">
-                                <input type="textbox" className="field" placeholder="Name" name="name" 
-                                    value={newServer.name} onChange={e => setNewServer({...newServer, name: e.target.value})} required />
-                                <label htmlFor="name" className="field-label">Name</label>
-                            </div>
-                            <div className="field-wrapper">
-                                <input type="textbox" className="field" placeholder="Version" name="version" 
-                                    value={newServer.version} onChange={e => setNewServer({...newServer, version: e.target.value})} required />
-                                <label htmlFor="version" className="field-label">Version</label>
-                            </div>
-                            <div className="field-wrapper full">
-                                <input type="textbox" className="field" placeholder="Description" name="description" 
-                                    value={newServer.description} onChange={e => setNewServer({...newServer, description: e.target.value})} required />
-                                <label htmlFor="description" className="field-label">Description</label>
-                            </div>
-                            <ul className="server-properties">
-                                {newServer.properties.map((property, index) => {
-                                    return (
-                                        <div className="field-wrapper">
-                                            <input type="textbox" className="field" placeholder={property.key} name={property.key.replace(" ", "") + index} 
-                                                value={property.value} onChange={e => handlePropUpdate(e, index)} required />
-                                            <label htmlFor={property.key.replace(" ", "") + index} className="field-label">{property.key}</label>
-                                        </div>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="submit-btn modal-submit" onClick={e => addServer(e)}>Add</button>
-                        </div>
-                    </div>
-                </div>
-            }
         </div>
     )
 }
