@@ -1,3 +1,8 @@
+export enum UserRole {
+	Normal,
+	Admin
+}
+
 export class User {
 	public constructor() {
 		this.userId = 0;
@@ -15,9 +20,4 @@ export class User {
 	userRole: UserRole;
 	isLocked: boolean;
 
-}
-
-export enum UserRole {
-	Normal,
-	Admin
 }

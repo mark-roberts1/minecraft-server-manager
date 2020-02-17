@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import api from '../Controller';
-import { setServers } from 'dns';
 import { User } from '../models/User';
 import './UserList.scss';
 import './AddModal.scss';

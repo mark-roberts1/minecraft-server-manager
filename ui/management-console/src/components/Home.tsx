@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import Modal from 'react-bootstrap/Modal';
-import Td from './Td';
 import { User, UserRole } from '../models/User';
 import { ServerInfo, ServerStatus } from '../models/ServerInfo';
 import { Template } from '../models/Template';
 import api from '../Controller';
 import './Home.scss';
 import { InviteUserRequest } from '../models/InviteUserRequest';
-import { InviteUserResponse } from '../models/InviteUserResponse';
 
 class HomeState {
     constructor() {
@@ -39,7 +36,7 @@ const Home: React.FC = () => {
                         .then(serverList => {
                             api.listTemplates()
                                 .then(templateList => {
-                                    if (user.userRole == UserRole.Admin){
+                                    if (user.userRole === UserRole.Admin){
                                         api.listUsers()
                                             .then(list => {
                                                 setHomeState({users: list, currentUser: user, servers: serverList, templates: templateList, loaded: true});
@@ -58,7 +55,7 @@ const Home: React.FC = () => {
         let count = 0;
 
         for (let i = 0; i < homeState.users.length; i++) {
-            if (homeState.users[i].userRole == role) {
+            if (homeState.users[i].userRole === role) {
                 count++;
             }
         }
@@ -82,7 +79,7 @@ const Home: React.FC = () => {
         let count = 0;
 
         for (let i = 0; i < homeState.templates.length; i++) {
-            if (isVersionUsed(homeState.templates[i].version) == used) {
+            if (isVersionUsed(homeState.templates[i].version) === used) {
                 count++;
             }
         }
@@ -92,7 +89,7 @@ const Home: React.FC = () => {
 
     const isVersionUsed = (version: string) => {
         for (let i = 0; i < homeState.servers.length; i++) {
-            if (homeState.servers[i].version == version) {
+            if (homeState.servers[i].version === version) {
                 return true;
             }
         }
@@ -104,7 +101,7 @@ const Home: React.FC = () => {
         let count = 0;
 
         for (let i = 0; i < homeState.servers.length; i++) {
-            if (homeState.servers[i].status == status) {
+            if (homeState.servers[i].status === status) {
                 count++;
             }
         }

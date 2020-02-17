@@ -5,7 +5,6 @@ import './ServerList.scss';
 import './AddModal.scss';
 import runningImg from '../media/server-running.png';
 import stoppedImg from '../media/server-stopped.png';
-import { Link, Route } from 'react-router-dom';
 import { CreateServerRequest } from '../models/CreateServerRequest';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
@@ -138,7 +137,7 @@ const ServerList: React.FC = () => {
                             return (
                                 <tr key={index}>
                                     <Td to={`server/${server.serverId}`}>
-                                        <img className="server-field status-img" src={server.status == ServerStatus.Started ? runningImg : stoppedImg} />
+                                        <img className="server-field status-img" src={server.status === ServerStatus.Started ? runningImg : stoppedImg} />
                                     </Td>
                                     <Td to={`server/${server.serverId}`}>{server.name}</Td>
                                     <Td to={`server/${server.serverId}`}>{server.version}</Td>
