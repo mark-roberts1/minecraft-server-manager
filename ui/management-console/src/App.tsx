@@ -5,7 +5,7 @@ import Login from './components/Login'
 import ServerList from './components/ServerList'
 import TemplateList from './components/TemplateList'
 import UserList from './components/UserList';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect, BrowserRouter } from 'react-router-dom'
 import Home from './components/Home';
 import Logout from './components/Logout';
 import LoggedOnUser from './models/LoggedOnUser';
@@ -13,6 +13,7 @@ import { User, UserRole } from './models/User';
 import Server from './components/Server';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserPage from './components/UserPage';
+import CreateAccount from './components/CreateAccount';
 
 const App: React.FC = () => {
   const authenticateUser = (authenticatedUser: User, isLoggedIn: boolean) => {
@@ -31,15 +32,14 @@ const App: React.FC = () => {
     isLocked: false,
     userRole: UserRole.Normal
   });
-  
+
   return (
     <Router>
     <div className="App">
       <Header {...user}></Header>
       <div className="app-content">
         <Switch>
-          {
-            !user.isAuthenticated &&
+          { !user.isAuthenticated &&
             <Redirect to="/login" {...user} />
           }
           <Route exact path="/">
@@ -60,6 +60,9 @@ const App: React.FC = () => {
         </Switch>
         <Route path="/login">
           <Login {...user} />
+        </Route>
+        <Route path="/createaccount">
+            <CreateAccount />
         </Route>
         <Route path="/server/:serverId">
           <Server />

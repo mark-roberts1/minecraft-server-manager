@@ -47,9 +47,11 @@ namespace ServerManager.Rest.Utility
             message.To.Add(new MailboxAddress(email));
             message.Subject = "Invitation to join";
 
-            message.Body = new TextPart("plain")
+            message.Body = new TextPart
             {
-                Text = $"You have been invited to create an account on marksgamedomain.net.\n\nPlease use the link to create an account.\n\n{_createAccountPrefix}{link}"
+                Text = $"You have been invited to create an account on https://marksgamedomain.net.\n" +
+                    "Please navigate to the site, click the \"Create Account\" option and use the below secret key to create your account.\n\n"+ 
+                    $"{_createAccountPrefix}{link}"
             };
 
             return await SendMessage(message, cancellationToken);
@@ -64,7 +66,7 @@ namespace ServerManager.Rest.Utility
 
             message.Body = new TextPart("plain")
             {
-                Text = $"Please use the provided link to reset your password. \n\n{_resetPasswordPrefix}{link}"
+                Text = $"Please use the provided secret key to reset your password.\n\n{link}"
             };
 
             return await SendMessage(message, cancellationToken);

@@ -5,20 +5,27 @@ import { Link, Redirect } from 'react-router-dom';
 import api from '../Controller'
 import LoggedOnUser from '../models/LoggedOnUser';
 
+interface LoginState {
+    login: LoginRequest;
+    loginChecked: boolean;
+}
+
 const Login: React.FC<LoggedOnUser> = (user: LoggedOnUser) => {
     const logonUser = user;
-    const [login, setLogin] = useState(new LoginRequest());
+    const [loginState, setLoginState] = useState<LoginState>({
+        login: new LoginRequest(),
+        loginChecked: false
+    });
     
-    let loginChecked: boolean = false;
-
     const loginApi = async (e: any) => {
-        await api.login(login);
+        await api.login(loginState.login);
         window.location.reload();
     }
 
     useEffect(() => {
-        if (!loginChecked) {
-            loginChecked = true;
+        if (!loginState.loginChecked) {
+            setLoginState({...loginState, loginChecked: true});
+
             api.getCurrentUser()
                 .then(user => {
                     logonUser.setAuthenticated(user, true);
@@ -27,7 +34,7 @@ const Login: React.FC<LoggedOnUser> = (user: LoggedOnUser) => {
                     
                 });
         }
-    })
+    }, [loginState, setLoginState]);
 
     return (
         <div className="login">
@@ -42,19 +49,19 @@ const Login: React.FC<LoggedOnUser> = (user: LoggedOnUser) => {
                     <div className="input-wrapper">
                         <div className="field-wrapper">
                             <input type="textbox" className="field" placeholder="Username" name="username" 
-                                value={login.username} onChange={e => setLogin({...login, username: e.target.value})} required />
+                                value={loginState.login.username} onChange={e => setLoginState({...loginState, login: {...loginState.login, username: e.target.value}})} required />
                             <label htmlFor="username" className="field-label">Username</label>
                         </div>
                         <div className="field-wrapper">
                             <input type="password" className="field" placeholder="Password" name="password" 
-                                value={login.password} onChange={e => setLogin({...login, password: e.target.value})} required />
+                                value={loginState.login.password} onChange={e => setLoginState({...loginState, login: {...loginState.login, password: e.target.value}})} required />
                             <label htmlFor="password" className="field-label">Password</label>
                         </div>
                     </div>
                     <button itemType="submit" className="login-btn" onClick={e => loginApi(e)}>Login</button>
                     <br/>
                     <Link className="link" to="/forgotpassword">Forgot Password</Link>|
-                    <Link className="link" to="/forgotusername">Forgot Username</Link>
+                    <Link className="link" to="/createaccount">Create Account</Link>
                 </div>
             }
         </div>
