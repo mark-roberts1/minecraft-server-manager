@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ServerInfo, ServerStatus } from '../models/ServerInfo';
 import { useParams } from 'react-router-dom';
 import api from '../Controller';
-import runningImg from '../media/server-running.png';
-import stoppedImg from '../media/server-stopped.png';
+import runningImg from '../media/torch-on.png';
+import stoppedImg from '../media/torch-off.png';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import './Server.scss';
 import { ServerProperty } from '../models/ServerProperty';
 import { ServerCommandRequest } from '../models/ServerCommandRequest';
 import Modal from 'react-bootstrap/Modal';
+import { debounce } from 'lodash';
+import { UpdateServerRequest } from '../models/UpdateServerRequest';
 
 class ServerState {
     constructor() {
@@ -39,18 +41,33 @@ const Server: React.FC = () => {
 
     let { serverId } = useParams();
     
+    const updateServer = async (serverId: number, request: UpdateServerRequest) => {
+        await api.updateServer(serverId, request);
+    }
+
+    const updateServerHandler = useCallback(debounce(updateServer, 400), []);
+
     const handlePropUpdate = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         let items = [...serverState.server.properties];
         let prop = {...items[index]};
         prop.value = e.target.value;
         items[index] = prop;
-        setServerState({...serverState, server: {...serverState.server, properties: items}})
+        setServerState({...serverState, server: {...serverState.server, properties: items}});
+
+        let request = new UpdateServerRequest();
+
+        request.newName = serverState.server.name;
+        request.description = serverState.server.description;
+        request.newProperties = items;
+        request.version = serverState.server.version;
+
+        updateServerHandler(serverState.server.serverId, request);
     }
 
     const startServer = () => {
         api.startServer(serverState.server.serverId)
             .then(res => {
-                setServerState({...serverState, server: {...serverState.server, status: res.didStart ? ServerStatus.Started : ServerStatus.Stopped}});
+                setServerState({...serverState, server: {...serverState.server, status: ServerStatus.Started}});
             })
     }
 
@@ -62,6 +79,15 @@ const Server: React.FC = () => {
     }
 
     const handleSendCommand = () => {
+        if (commandWindowState.command === "clear") {
+            setCommandWindowState({
+                command: "",
+                outputLines: []
+            });
+
+            return;
+        }
+
         let request = new ServerCommandRequest();
         request.command = commandWindowState.command;
 
